@@ -104,7 +104,7 @@ export function mountCaseFile(container: HTMLElement): void {
       const rows = guesses
         .map((g) => caseFile.categories.map((c) => (g.results[c.key] ? "🟩" : "⬛")).join(""))
         .join("\n");
-      return `Case File — "${caseFile.title}"\n${rows}\n${guesses.length}/${MAX_ATTEMPTS} attempts — Sy's Cyberspace`;
+      return `Case File — "${caseFile.title}"\n${rows}\n${guesses.length}/${MAX_ATTEMPTS} attempts — Syberspace`;
     }
 
     function finish(solved: boolean) {

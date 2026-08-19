@@ -1,4 +1,4 @@
-// Shared type definitions for the three Cyberspace games.
+// Shared type definitions for the three Syberspace games.
 
 export type CipherType = "caesar" | "vigenere" | "xor";
 

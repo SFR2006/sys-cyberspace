@@ -4,8 +4,8 @@
 /* ---------------------------------------------------------------------
    Two theme "worlds":
    - paper-*  → the warm portfolio sections (Home/About/Journey/Projects/Contact)
-   - cyber-*  → the dark "Cyberspace" games zone
-   The Cyberspace zone uses a system monospace stack on purpose (no extra
+   - cyber-*  → the dark "Syberspace" games zone
+   The Syberspace zone uses a system monospace stack on purpose (no extra
    external font request) to keep the number of third-party calls small.
 ------------------------------------------------------------------------ */
 @theme {
@@ -75,7 +75,7 @@
   background: linear-gradient(135deg, var(--color-paper-bg) 0%, var(--color-paper-bg2) 100%);
 }
 
-/* Cyberspace zone: subtle scanline texture instead of the paper dots */
+/* Syberspace zone: subtle scanline texture instead of the paper dots */
 .cyber-scanlines {
   background-image: repeating-linear-gradient(
     0deg,

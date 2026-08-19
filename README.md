@@ -1,7 +1,7 @@
-# Sy's Cyberspace
+# Syberspace
 
 Syeda Rahman's personal site — a portfolio (About, Cyber Journey, Projects, Contact) plus
-**Cyberspace**, a small collection of original browser-based cybersecurity games:
+**Syberspace**, a small collection of original browser-based cybersecurity games:
 
 - 🔐 **Cipher Terminal** — decode Caesar, Vigenère, and XOR ciphers, with a short explainer on how each one actually works.
 - 🔑 **Breach Check** — a live password strength / crack-time estimator. Nothing typed there ever leaves the browser.
