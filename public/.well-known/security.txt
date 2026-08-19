@@ -1,0 +1,7 @@
+Contact: mailto:syedarahman2006@gmail.com
+Preferred-Languages: en
+Expires: 2027-08-19T00:00:00.000Z
+
+# This is a personal portfolio site, not a company — but if you find a
+# genuine security issue (XSS, header misconfig, etc.), I'd love to hear
+# about it. Please be kind, this is a student project :)
