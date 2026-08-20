@@ -5,3 +5,6 @@ dist/
 .vscode/*
 !.vscode/extensions.json
 .claude/settings.local.json
+
+# Raw source icon files (large; processed copies live in public/)
+/assets/

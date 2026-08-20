@@ -36,24 +36,24 @@ function recordResult(solved: boolean) {
 }
 
 export function mountCaseFile(container: HTMLElement): void {
-  const statsLine = el("p", { className: "text-sm text-cyber-text-dim" });
+  const statsLine = el("p", { className: "font-serif italic text-paper-ink-soft" });
 
   function refreshStats() {
     const stats = readJSON<Stats>(STATS_KEY, { played: 0, solved: 0 });
     statsLine.textContent = `${stats.solved} solved / ${stats.played} played`;
   }
 
-  const body = el("div", {});
+  const body = el("div", { className: "mt-6" });
 
   function startCase(caseFile: CaseFile) {
     const guesses: CaseGuess[] = [];
     let finished = false;
     let revealedEvidence = 1;
 
-    const evidenceList = el("ul", { className: "list-disc space-y-1 pl-5 text-sm text-cyber-text" });
+    const evidenceList = el("ul", { className: "list-disc space-y-1 pl-5 text-sm text-paper-ink" });
     const guessGrid = el("div", { className: "mt-4 space-y-2" });
-    const attemptsLabel = el("p", { className: "mt-2 text-xs text-cyber-text-dim" });
-    const resolutionBox = el("div", { className: "mt-4 hidden border-t border-cyber-border pt-4" });
+    const attemptsLabel = el("p", { className: "mt-2 text-xs text-paper-ink-soft" });
+    const resolutionBox = el("div", { className: "mt-4 hidden border-t border-paper-ink/20 pt-4" });
 
     const selects = caseFile.categories.map((cat) => {
       const options = [
@@ -61,7 +61,7 @@ export function mountCaseFile(container: HTMLElement): void {
         ...cat.options.map((opt) => el("option", { text: opt, attrs: { value: opt } })),
       ];
       const select = el("select", {
-        className: "w-full border border-cyber-border bg-cyber-bg px-2 py-2 text-sm text-cyber-text focus:border-cyber-accent focus:outline-none",
+        className: "w-full border-2 border-paper-ink bg-paper-card/70 px-2 py-2 text-sm text-paper-ink focus:outline-none focus:ring-2 focus:ring-paper-ink",
         attrs: { "data-key": cat.key },
         children: options,
       }) as HTMLSelectElement;
@@ -69,14 +69,14 @@ export function mountCaseFile(container: HTMLElement): void {
     });
 
     const submitBtn = el("button", {
-      className: "mt-3 bg-cyber-accent px-4 py-2 font-semibold text-cyber-bg hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40",
+      className: "mt-3 bg-paper-ink px-4 py-2 font-serif italic text-paper-bg shadow-[3px_3px_0px_var(--shadow-sm)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40",
       text: "Submit Guess",
       attrs: { type: "button" },
     }) as HTMLButtonElement;
 
     const guessForm = el("div", {
       className: "mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2",
-      children: selects.map((s) => el("label", { className: "block text-xs uppercase tracking-wider text-cyber-text-dim", text: s.label, children: [s.select] })),
+      children: selects.map((s) => el("label", { className: "block text-xs uppercase tracking-wider text-paper-ink-soft", text: s.label, children: [s.select] })),
     });
 
     function renderEvidence() {
@@ -91,7 +91,7 @@ export function mountCaseFile(container: HTMLElement): void {
             children: caseFile.categories.map((cat) => {
               const isCorrect = guess.results[cat.key];
               return el("span", {
-                className: `border px-2 py-1 text-xs ${isCorrect ? "border-cyber-accent bg-cyber-accent/15 text-cyber-accent" : "border-cyber-border bg-cyber-bg2 text-cyber-text-dim"}`,
+                className: `border-2 px-2 py-1 text-xs ${isCorrect ? "border-game-good bg-game-good/15 text-game-good" : "border-paper-ink/30 bg-paper-bg/40 text-paper-ink-soft"}`,
                 text: `${isCorrect ? "✓" : "✗"} ${guess.values[cat.key]}`,
               });
             }),
@@ -120,11 +120,11 @@ export function mountCaseFile(container: HTMLElement): void {
       attemptsLabel.textContent = "";
 
       const shareBtn = el("button", {
-        className: "border border-cyber-border px-3 py-1.5 text-xs text-cyber-text-dim hover:border-cyber-accent2 hover:text-cyber-accent2",
+        className: "border-2 border-paper-ink/30 px-3 py-1.5 text-xs text-paper-ink-soft transition hover:border-paper-ink hover:text-paper-ink",
         text: "Copy shareable result",
         attrs: { type: "button" },
       });
-      const shareStatus = el("span", { className: "ml-3 text-xs text-cyber-accent" });
+      const shareStatus = el("span", { className: "ml-3 text-xs text-game-good" });
       shareBtn.addEventListener("click", async () => {
         try {
           await navigator.clipboard.writeText(shareGrid());
@@ -136,7 +136,7 @@ export function mountCaseFile(container: HTMLElement): void {
       });
 
       const nextBtn = el("button", {
-        className: "bg-cyber-accent px-4 py-2 font-semibold text-cyber-bg hover:brightness-110",
+        className: "bg-paper-ink px-4 py-2 font-serif italic text-paper-bg shadow-[3px_3px_0px_var(--shadow-sm)] transition hover:-translate-y-0.5",
         text: "Next Case",
         attrs: { type: "button" },
       });
@@ -144,8 +144,8 @@ export function mountCaseFile(container: HTMLElement): void {
 
       resolutionBox.classList.remove("hidden");
       resolutionBox.replaceChildren(
-        el("p", { className: `mb-2 text-sm font-semibold ${solved ? "text-cyber-accent" : "text-cyber-danger"}`, text: solved ? "✔ Case closed — you nailed it." : "✘ Case file closed — here's what really happened:" }),
-        el("p", { className: "text-sm text-cyber-text", text: caseFile.resolution }),
+        el("p", { className: `mb-2 text-sm font-semibold ${solved ? "text-game-good" : "text-game-bad"}`, text: solved ? "✔ Case closed — you nailed it." : "✘ Case file closed — here's what really happened:" }),
+        el("p", { className: "text-sm text-paper-ink", text: caseFile.resolution }),
         el("div", { className: "mt-4 flex flex-wrap items-center gap-3", children: [nextBtn, shareBtn, shareStatus] }),
       );
     }
@@ -160,7 +160,7 @@ export function mountCaseFile(container: HTMLElement): void {
       }
       if (!allFilled) {
         attemptsLabel.textContent = "Pick an answer for every category before submitting.";
-        attemptsLabel.className = "mt-2 text-xs text-cyber-danger";
+        attemptsLabel.className = "mt-2 text-xs font-medium text-game-bad";
         return;
       }
 
@@ -187,16 +187,16 @@ export function mountCaseFile(container: HTMLElement): void {
       revealedEvidence = Math.min(caseFile.evidence.length, revealedEvidence + 1);
       renderEvidence();
       attemptsLabel.textContent = `${MAX_ATTEMPTS - guesses.length} attempt${MAX_ATTEMPTS - guesses.length === 1 ? "" : "s"} remaining.`;
-      attemptsLabel.className = "mt-2 text-xs text-cyber-text-dim";
+      attemptsLabel.className = "mt-2 text-xs text-paper-ink-soft";
     });
 
     renderEvidence();
     attemptsLabel.textContent = `${MAX_ATTEMPTS} attempts available.`;
 
     body.replaceChildren(
-      el("h4", { className: "font-serif text-lg text-cyber-accent2", text: caseFile.title }),
-      el("p", { className: "mt-1 text-sm text-cyber-text", text: caseFile.briefing }),
-      el("p", { className: "mt-4 text-xs uppercase tracking-wider text-cyber-text-dim", text: "Evidence" }),
+      el("h4", { className: "font-serif text-lg italic", text: caseFile.title }),
+      el("p", { className: "mt-1 text-sm text-paper-ink", text: caseFile.briefing }),
+      el("p", { className: "mt-4 text-xs uppercase tracking-wider text-paper-ink-soft", text: "Evidence" }),
       evidenceList,
       guessGrid,
       guessForm,
@@ -208,8 +208,8 @@ export function mountCaseFile(container: HTMLElement): void {
 
   refreshStats();
   container.replaceChildren(
-    el("div", { className: "flex items-center justify-between gap-4", children: [el("h3", { className: "text-lg font-semibold text-cyber-accent", text: "Case File" }), statsLine] }),
-    el("p", { className: "mt-2 text-sm text-cyber-text-dim", text: "Read the evidence, then submit a full guess: compromised asset, attack vector, threat actor, and motive. Green means correct, like a certain word game you might know." }),
+    el("div", { className: "flex flex-wrap items-center justify-between gap-4", children: [el("h3", { className: "font-serif text-xl italic", text: "Case File" }), statsLine] }),
+    el("p", { className: "mt-2 text-sm text-paper-ink-soft", text: "Read the evidence, then submit a full guess: compromised asset, attack vector, threat actor, and motive. Green means correct, like a certain word game you might know." }),
     body,
   );
 

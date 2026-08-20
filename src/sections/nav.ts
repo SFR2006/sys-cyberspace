@@ -1,7 +1,11 @@
+import { setActiveSection } from "../lib/theme";
+
 /**
- * Highlights the nav link for whichever section is currently in view.
- * Smooth scrolling itself is handled purely by CSS (`scroll-behavior:
- * smooth` + native anchor links) — no click handling needed here.
+ * Highlights the nav link for whichever section is currently in view, and
+ * drives the Syberspace-triggered dark mode (see src/lib/theme.ts) off the
+ * same observer. Smooth scrolling itself is handled purely by CSS
+ * (`scroll-behavior: smooth` + native anchor links) — no click handling
+ * needed here.
  */
 export function initNav(): void {
   const links = new Map<string, HTMLAnchorElement>();
@@ -29,7 +33,10 @@ export function initNav(): void {
       const visible = entries
         .filter((entry) => entry.isIntersecting)
         .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if (visible) setActive(visible.target.id);
+      if (visible) {
+        setActive(visible.target.id);
+        setActiveSection(visible.target.id);
+      }
     },
     { rootMargin: "-45% 0px -45% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] },
   );

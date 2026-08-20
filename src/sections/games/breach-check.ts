@@ -28,11 +28,11 @@ function estimateBits(password: string): number {
 }
 
 function classify(bits: number): Strength {
-  if (bits < 28) return { bits, label: "Very Weak", color: "bg-cyber-danger", widthPct: 15 };
-  if (bits < 40) return { bits, label: "Weak", color: "bg-cyber-warn", widthPct: 35 };
-  if (bits < 60) return { bits, label: "Fair", color: "bg-cyber-accent2", widthPct: 60 };
-  if (bits < 80) return { bits, label: "Strong", color: "bg-cyber-accent", widthPct: 85 };
-  return { bits, label: "Very Strong", color: "bg-cyber-accent", widthPct: 100 };
+  if (bits < 28) return { bits, label: "Very Weak", color: "bg-game-bad", widthPct: 15 };
+  if (bits < 40) return { bits, label: "Weak", color: "bg-game-warn", widthPct: 35 };
+  if (bits < 60) return { bits, label: "Fair", color: "bg-game-warn", widthPct: 60 };
+  if (bits < 80) return { bits, label: "Strong", color: "bg-game-good", widthPct: 85 };
+  return { bits, label: "Very Strong", color: "bg-game-good", widthPct: 100 };
 }
 
 const AGE_OF_UNIVERSE_SECONDS = 13.8e9 * 60 * 60 * 24 * 365;
@@ -74,21 +74,22 @@ function crackTime(bits: number, guessesPerSecond: number): string {
 
 export function mountBreachCheck(container: HTMLElement): void {
   const input = el("input", {
-    className: "w-full border border-cyber-border bg-cyber-bg px-3 py-3 font-mono text-lg text-cyber-text focus:border-cyber-accent focus:outline-none",
-    attrs: { type: "text", placeholder: "Type a *practice* password here...", autocomplete: "off", spellcheck: false },
+    className: "w-full border-2 border-paper-ink bg-paper-card/70 px-3 py-3 font-mono text-lg text-paper-ink focus:outline-none focus:ring-2 focus:ring-paper-ink",
+    attrs: { type: "text", placeholder: "Type a *practice* password here...", autocomplete: "off" },
   }) as HTMLInputElement;
+  input.spellcheck = false; // enumerated attribute — see hero-doodles.ts for why this can't go through attrs
 
-  const barFill = el("div", { className: "h-full w-0 bg-cyber-danger transition-all duration-200" });
-  const bar = el("div", { className: "mt-3 h-3 w-full overflow-hidden border border-cyber-border bg-cyber-bg2", children: [barFill] });
-  const label = el("p", { className: "mt-2 text-sm font-semibold text-cyber-text-dim", text: "Start typing to see a live estimate." });
+  const barFill = el("div", { className: "h-full w-0 bg-game-bad transition-all duration-200" });
+  const bar = el("div", { className: "mt-3 h-3 w-full overflow-hidden border-2 border-paper-ink/30 bg-paper-bg/40", children: [barFill] });
+  const label = el("p", { className: "mt-2 text-sm font-semibold text-paper-ink-soft", text: "Start typing to see a live estimate." });
 
-  const commonWarning = el("p", { className: "mt-3 hidden border border-cyber-danger bg-cyber-danger/10 px-3 py-2 text-sm text-cyber-danger" });
+  const commonWarning = el("p", { className: "mt-3 hidden border-2 border-game-bad bg-game-bad/10 px-3 py-2 text-sm text-game-bad" });
 
-  const fastRow = el("p", { className: "text-sm text-cyber-text-dim" });
-  const slowRow = el("p", { className: "text-sm text-cyber-text-dim" });
-  const scenarios = el("div", { className: "mt-4 space-y-1 border-t border-cyber-border pt-4", children: [fastRow, slowRow] });
+  const fastRow = el("p", { className: "text-sm text-paper-ink-soft" });
+  const slowRow = el("p", { className: "text-sm text-paper-ink-soft" });
+  const scenarios = el("div", { className: "mt-4 space-y-1 border-t border-paper-ink/20 pt-4", children: [fastRow, slowRow] });
 
-  const tips = el("ul", { className: "mt-4 list-disc space-y-1 pl-5 text-sm text-cyber-text-dim" });
+  const tips = el("ul", { className: "mt-4 list-disc space-y-1 pl-5 text-sm text-paper-ink-soft" });
 
   function update() {
     const value = input.value;
@@ -129,9 +130,9 @@ export function mountBreachCheck(container: HTMLElement): void {
   input.addEventListener("input", update);
 
   container.replaceChildren(
-    el("h3", { className: "text-lg font-semibold text-cyber-accent", text: "Breach Check" }),
-    el("p", { className: "mt-2 text-sm text-cyber-text-dim", text: "A live password strength / crack-time estimator. Nothing you type here ever leaves your browser — it isn't logged, stored, or sent anywhere. (Please don't type a real password — use a throwaway example.)" }),
-    input,
+    el("h3", { className: "font-serif text-xl italic", text: "Breach Check" }),
+    el("p", { className: "mt-2 text-sm text-paper-ink-soft", text: "A live password strength / crack-time estimator. Nothing you type here ever leaves your browser — it isn't logged, stored, or sent anywhere. (Please don't type a real password — use a throwaway example.)" }),
+    el("div", { className: "mt-6", children: [input] }),
     bar,
     label,
     commonWarning,

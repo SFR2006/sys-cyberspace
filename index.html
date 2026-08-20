@@ -10,7 +10,7 @@
 <body class="paper-gradient paper-texture relative min-h-screen overflow-x-hidden text-paper-ink">
 
   <!-- ============ NAV ============ -->
-  <nav class="fixed top-0 z-50 w-full border-b-2 border-paper-ink bg-paper-bg/95 py-5 shadow-[0_2px_20px_rgba(0,0,0,0.1)] backdrop-blur-md">
+  <nav class="fixed top-0 z-50 w-full border-b-2 border-paper-ink bg-paper-bg/95 py-5 shadow-[0_2px_20px_var(--shadow-sm)] backdrop-blur-md">
     <ul class="flex flex-wrap items-center justify-center gap-6 sm:gap-12">
       <li><a href="#home" class="nav-link font-serif italic text-paper-ink hover:opacity-70">Home</a></li>
       <li><a href="#about" class="nav-link font-serif italic text-paper-ink hover:opacity-70">About</a></li>
@@ -23,62 +23,16 @@
 
   <main>
     <!-- ============ HERO ============ -->
-    <section id="home" class="relative mx-auto flex min-h-screen max-w-5xl flex-col items-center justify-center overflow-hidden px-6 pb-16 pt-28 text-center">
+    <section id="home" class="relative mx-auto flex min-h-screen w-full max-w-6xl flex-col items-center justify-center overflow-hidden px-6 pb-16 pt-28 text-center">
 
-      <!-- Scattered "favorite things" doodles — decorative, hover for a caption -->
-      <div class="pointer-events-none absolute inset-0 z-0 hidden lg:block" aria-hidden="true">
-        <div class="doodle group pointer-events-auto absolute top-[16%] left-[5%] [--doodle-rot:-8deg] [--doodle-delay:0s]">
-          <div class="doodle-badge relative flex h-14 w-14 items-center justify-center rounded-full border-2 border-paper-ink bg-white/70 shadow-[4px_4px_0px_rgba(0,0,0,0.2)] backdrop-blur transition-transform duration-300 hover:scale-125 hover:-rotate-3">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="h-7 w-7">
-              <ellipse cx="12" cy="5" rx="7" ry="2.2"/><ellipse cx="12" cy="19" rx="7" ry="2.2"/>
-              <path d="M5 5 L5 19 M19 5 L19 19"/>
-              <path d="M6 8 L18 12 M18 8 L6 12 M6 15 L18 15" opacity="0.6"/>
-            </svg>
-            <span class="pointer-events-none absolute -bottom-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-paper-ink px-2 py-1 text-xs text-paper-bg opacity-0 transition-opacity duration-200 group-hover:opacity-100">embroidery &amp; crochet</span>
-          </div>
-        </div>
+      <!-- Draggable "favorite things" stickers — rendered by src/sections/hero-doodles.ts.
+           Hover for a caption, click for a little blurb, drag them anywhere you like. -->
+      <div id="hero-doodles" class="absolute inset-0 z-20 hidden lg:block" aria-hidden="false"></div>
 
-        <div class="doodle group pointer-events-auto absolute top-[14%] right-[6%] [--doodle-rot:6deg] [--doodle-delay:1.2s]">
-          <div class="doodle-badge relative flex h-14 w-14 items-center justify-center rounded-full border-2 border-paper-ink bg-white/70 shadow-[4px_4px_0px_rgba(0,0,0,0.2)] backdrop-blur transition-transform duration-300 hover:scale-125 hover:rotate-3">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="h-7 w-7">
-              <path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>
-            </svg>
-            <span class="pointer-events-none absolute -bottom-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-paper-ink px-2 py-1 text-xs text-paper-bg opacity-0 transition-opacity duration-200 group-hover:opacity-100">professional-grade shopping</span>
-          </div>
-        </div>
-
-        <div class="doodle group pointer-events-auto absolute bottom-[20%] left-[7%] [--doodle-rot:-4deg] [--doodle-delay:0.6s]">
-          <div class="doodle-badge relative flex h-14 w-14 items-center justify-center rounded-full border-2 border-paper-ink bg-white/70 shadow-[4px_4px_0px_rgba(0,0,0,0.2)] backdrop-blur transition-transform duration-300 hover:scale-125 hover:-rotate-3">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="h-7 w-7">
-              <path d="M12 6c-1.8-1.2-4.3-1.6-7-1v13c2.7-0.6 5.2-0.2 7 1 1.8-1.2 4.3-1.6 7-1V5c-2.7-0.6-5.2-0.2-7 1z"/><path d="M12 6v13"/>
-            </svg>
-            <span class="pointer-events-none absolute -bottom-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-paper-ink px-2 py-1 text-xs text-paper-bg opacity-0 transition-opacity duration-200 group-hover:opacity-100">always mid-book</span>
-          </div>
-        </div>
-
-        <div class="doodle group pointer-events-auto absolute bottom-[24%] right-[5%] [--doodle-rot:5deg] [--doodle-delay:1.8s]">
-          <div class="doodle-badge relative flex h-14 w-14 items-center justify-center rounded-full border-2 border-paper-ink bg-white/70 shadow-[4px_4px_0px_rgba(0,0,0,0.2)] backdrop-blur transition-transform duration-300 hover:scale-125 hover:rotate-3">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="h-7 w-7">
-              <path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/>
-            </svg>
-            <span class="pointer-events-none absolute -bottom-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-paper-ink px-2 py-1 text-xs text-paper-bg opacity-0 transition-opacity duration-200 group-hover:opacity-100">Dominic Fike on repeat</span>
-          </div>
-        </div>
-
-        <div class="doodle group pointer-events-auto absolute top-[48%] left-[2%] [--doodle-rot:-3deg] [--doodle-delay:0.9s]">
-          <div class="doodle-badge relative flex h-14 w-14 items-center justify-center rounded-full border-2 border-paper-ink bg-white/70 shadow-[4px_4px_0px_rgba(0,0,0,0.2)] backdrop-blur transition-transform duration-300 hover:scale-125 hover:-rotate-3">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="h-7 w-7">
-              <path d="M12 3c3 2 4 5 3 8-1 2.7-3 3.7-3 3.7s-2-1-3-3.7c-1-3 0-6 3-8z" opacity="0.85"/><circle cx="15.5" cy="9" r="4.2"/><path d="M18.5 12l3 3"/>
-            </svg>
-            <span class="pointer-events-none absolute -bottom-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-paper-ink px-2 py-1 text-xs text-paper-bg opacity-0 transition-opacity duration-200 group-hover:opacity-100">true crime podcast addict 🔍</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="relative z-10">
+      <div class="relative z-10 mx-auto max-w-3xl">
         <h1 class="mb-4 font-serif text-5xl font-bold sm:text-7xl">Syeda Rahman</h1>
         <p class="mb-8 font-serif text-xl italic sm:text-2xl">Aspiring Cybersecurity Analyst</p>
-        <p class="max-w-3xl text-lg font-light leading-relaxed">
+        <p class="text-lg font-light leading-relaxed">
           Hi! I'm Syeda, a sophomore at Baruch College (Macaulay Honors) studying Computer Information Systems
           with a focus in Cybersecurity and Information Risk Management. I'm passionate about using technology
           to keep people safe online, especially women and vulnerable communities, and I'm driven by the belief
@@ -132,14 +86,17 @@
     </section>
 
     <!-- ============ CYBERSPACE (games zone) ============ -->
-    <section id="cyberspace" class="scroll-mt-24 cyber-scanlines relative border-y-4 border-cyber-accent/40 bg-cyber-bg px-6 py-20 font-mono text-cyber-text">
+    <section id="cyberspace" class="scroll-mt-24 relative border-y-4 border-paper-ink bg-paper-bg2/60 paper-texture px-6 py-20">
       <div class="mx-auto max-w-5xl">
-        <p class="mb-2 text-center text-sm tracking-[0.3em] text-cyber-accent">// WELCOME TO</p>
-        <h2 class="cyber-glow mb-4 text-center text-3xl font-bold text-cyber-accent sm:text-5xl">Syberspace</h2>
-        <p class="mx-auto mb-12 max-w-2xl text-center text-sm text-cyber-text-dim sm:text-base">
+        <p class="mb-2 text-center font-serif text-lg italic text-paper-ink-soft">welcome to</p>
+        <h2 class="mb-4 flex justify-center">
+          <img src="/syberspace-logo.png" alt="Syberspace" class="h-auto w-full max-w-xs border-2 border-paper-ink bg-white px-6 py-4 shadow-[6px_6px_0px_var(--shadow-md)] sm:max-w-sm" />
+        </h2>
+        <p class="mx-auto mb-6 max-w-2xl text-center text-lg font-light leading-relaxed">
           Three small games I built to make cybersecurity concepts hands-on. Everything below runs
           entirely in your browser — nothing you type or click here is ever sent anywhere.
         </p>
+        <div id="dark-mode-toggle" class="mb-10 flex justify-center"></div>
         <div id="games-root"></div>
       </div>
     </section>
@@ -161,26 +118,26 @@
           <div class="mb-6">
             <label for="name" class="mb-2 block font-medium">Name</label>
             <input type="text" id="name" name="name" required maxlength="120"
-              class="w-full border-2 border-paper-ink bg-white/70 p-3 font-sans focus:outline-none focus:ring-2 focus:ring-paper-ink" />
+              class="w-full border-2 border-paper-ink bg-paper-card/70 p-3 font-sans focus:outline-none focus:ring-2 focus:ring-paper-ink" />
           </div>
           <div class="mb-6">
             <label for="email" class="mb-2 block font-medium">Email</label>
             <input type="email" id="email" name="email" required maxlength="180"
-              class="w-full border-2 border-paper-ink bg-white/70 p-3 font-sans focus:outline-none focus:ring-2 focus:ring-paper-ink" />
+              class="w-full border-2 border-paper-ink bg-paper-card/70 p-3 font-sans focus:outline-none focus:ring-2 focus:ring-paper-ink" />
           </div>
           <div class="mb-6">
             <label for="subject" class="mb-2 block font-medium">Subject</label>
             <input type="text" id="subject" name="subject" required maxlength="200"
-              class="w-full border-2 border-paper-ink bg-white/70 p-3 font-sans focus:outline-none focus:ring-2 focus:ring-paper-ink" />
+              class="w-full border-2 border-paper-ink bg-paper-card/70 p-3 font-sans focus:outline-none focus:ring-2 focus:ring-paper-ink" />
           </div>
           <div class="mb-6">
             <label for="message" class="mb-2 block font-medium">Message</label>
             <textarea id="message" name="message" rows="6" required maxlength="4000"
-              class="w-full resize-y border-2 border-paper-ink bg-white/70 p-3 font-sans focus:outline-none focus:ring-2 focus:ring-paper-ink"></textarea>
+              class="w-full resize-y border-2 border-paper-ink bg-paper-card/70 p-3 font-sans focus:outline-none focus:ring-2 focus:ring-paper-ink"></textarea>
           </div>
           <p id="contact-error" class="mb-4 hidden text-sm font-medium text-red-700" role="alert"></p>
           <button type="submit"
-            class="w-full cursor-pointer border-none bg-paper-ink px-4 py-4 font-serif italic text-paper-bg shadow-[4px_4px_0px_rgba(0,0,0,0.3)] transition hover:-translate-y-0.5">
+            class="w-full cursor-pointer border-none bg-paper-ink px-4 py-4 font-serif italic text-paper-bg shadow-[4px_4px_0px_var(--shadow-lg)] transition hover:-translate-y-0.5">
             Send Message
           </button>
         </form>
@@ -202,7 +159,7 @@
 
   <!-- ============ SUCCESS POPUP ============ -->
   <div id="success-popup"
-    class="fixed left-1/2 top-1/2 z-[3000] max-w-sm -translate-x-1/2 -translate-y-1/2 scale-0 border-2 border-paper-ink bg-white/95 p-10 text-center opacity-0 shadow-[15px_15px_0px_rgba(0,0,0,0.3)] transition-all duration-300">
+    class="fixed left-1/2 top-1/2 z-[3000] max-w-sm -translate-x-1/2 -translate-y-1/2 scale-0 border-2 border-paper-ink bg-paper-card/95 p-10 text-center opacity-0 shadow-[15px_15px_0px_var(--shadow-lg)] transition-all duration-300">
     <svg class="checkmark mx-auto mb-4 block h-16 w-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
       <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none" />
       <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />

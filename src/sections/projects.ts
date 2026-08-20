@@ -166,7 +166,7 @@ function renderModal(project: Project): HTMLElement {
     attrs: { id: `modal-${project.id}`, role: "dialog", "aria-modal": "true", "aria-label": project.detailTitle },
     children: [
       el("div", {
-        className: "modal-content relative max-h-[90vh] w-full max-w-3xl overflow-y-auto paper-gradient border-[3px] border-paper-ink p-8 shadow-[15px_15px_0px_rgba(0,0,0,0.3)] sm:p-12",
+        className: "modal-content relative max-h-[90vh] w-full max-w-3xl overflow-y-auto paper-gradient border-[3px] border-paper-ink p-8 shadow-[15px_15px_0px_var(--shadow-lg)] sm:p-12",
         children: [
           closeBtn,
           el("h3", { className: "mb-6 text-center font-serif text-3xl", text: project.detailTitle }),
@@ -209,7 +209,7 @@ function renderCard(project: Project, openModal: () => void): HTMLElement {
   children.push(el("p", { className: "mt-4 text-center text-sm italic text-paper-ink-soft", text: "Click to view details →" }));
 
   const card = el("div", {
-    className: "project-card cursor-pointer border-2 border-paper-ink bg-white/50 p-8 shadow-[6px_6px_0px_rgba(0,0,0,0.15)] backdrop-blur transition-all hover:-translate-y-2 hover:shadow-[10px_10px_0px_rgba(0,0,0,0.2)]",
+    className: "project-card cursor-pointer border-2 border-paper-ink bg-paper-card/50 p-8 shadow-[6px_6px_0px_var(--shadow-sm)] backdrop-blur transition-all hover:-translate-y-2 hover:shadow-[10px_10px_0px_var(--shadow-md)]",
     attrs: { role: "button", tabindex: 0 },
     children,
   });

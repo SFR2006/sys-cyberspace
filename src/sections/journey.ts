@@ -49,7 +49,7 @@ function rotationFor(index: number): string {
 
 function renderPostIt(postIt: PostIt, index: number): HTMLElement {
   return el("div", {
-    className: `post-it w-[190px] min-h-[150px] border-2 border-paper-ink bg-paper-bg/90 p-5 shadow-[4px_4px_10px_rgba(0,0,0,0.25)] transition-all hover:z-10 hover:scale-105 hover:rotate-0 ${rotationFor(index)}`,
+    className: `post-it w-[190px] min-h-[150px] border-2 border-paper-ink bg-paper-bg/90 p-5 shadow-[4px_4px_10px_var(--shadow-md)] transition-all hover:z-10 hover:scale-105 hover:rotate-0 ${rotationFor(index)}`,
     children: [
       el("div", { className: "mb-2 text-xs italic text-paper-ink-soft", text: postIt.date }),
       el("div", { className: "text-sm leading-relaxed", text: postIt.text }),
@@ -62,12 +62,12 @@ function renderPostIt(postIt: PostIt, index: number): HTMLElement {
  * `innerHTML`, so there is no way for typed text to be parsed as markup. */
 function renderAddPostIt(container: HTMLElement, addTile: HTMLElement): HTMLElement {
   const dateInput = el("input", {
-    className: "mb-2 w-full border border-paper-ink bg-white/80 px-2 py-1 text-xs",
+    className: "mb-2 w-full border border-paper-ink bg-paper-card/80 px-2 py-1 text-xs",
     attrs: { type: "text", placeholder: "Date (e.g. Jan 6, 2026)", maxlength: 40 },
   }) as HTMLInputElement;
 
   const textInput = el("textarea", {
-    className: "mb-2 w-full resize-none border border-paper-ink bg-white/80 px-2 py-1 text-xs",
+    className: "mb-2 w-full resize-none border border-paper-ink bg-paper-card/80 px-2 py-1 text-xs",
     attrs: { placeholder: "Progress update...", maxlength: MAX_POSTIT_LENGTH, rows: 3 },
   }) as HTMLTextAreaElement;
 
@@ -98,7 +98,7 @@ function renderMilestone(milestone: Milestone): HTMLElement {
   const postItContainer = el("div", { className: "mt-6 flex flex-wrap gap-6" });
 
   const addTile = el("div", {
-    className: "add-post-it flex h-[150px] w-[190px] cursor-pointer items-center justify-center border-2 border-dashed border-paper-ink text-4xl text-paper-ink/70 transition hover:bg-white/40",
+    className: "add-post-it flex h-[150px] w-[190px] cursor-pointer items-center justify-center border-2 border-dashed border-paper-ink text-4xl text-paper-ink/70 transition hover:bg-paper-card/40",
     text: "+",
     attrs: { role: "button", tabindex: 0, title: "Add new update", "aria-label": "Add new update" },
   });
@@ -119,7 +119,7 @@ function renderMilestone(milestone: Milestone): HTMLElement {
   postItContainer.append(addTile);
 
   return el("div", {
-    className: "timeline-item mb-8 border-2 border-paper-ink bg-white/40 p-8 shadow-[6px_6px_0px_rgba(0,0,0,0.15)] backdrop-blur transition hover:translate-x-2",
+    className: "timeline-item mb-8 border-2 border-paper-ink bg-paper-card/40 p-8 shadow-[6px_6px_0px_var(--shadow-sm)] backdrop-blur transition hover:translate-x-2",
     children: [
       el("h3", { className: "mb-1 font-serif text-xl", text: milestone.title }),
       el("p", { className: "mb-4 font-serif text-sm italic text-paper-ink-soft", text: milestone.date }),

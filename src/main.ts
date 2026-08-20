@@ -5,10 +5,16 @@ import { renderJourney } from "./sections/journey";
 import { renderProjects } from "./sections/projects";
 import { renderGames } from "./sections/games";
 import { initContact } from "./sections/contact";
+import { initTheme, renderDarkModeToggle } from "./lib/theme";
+import { renderHeroDoodles } from "./sections/hero-doodles";
+import { required } from "./lib/dom";
 
+initTheme();
+renderHeroDoodles();
 renderAbout();
 renderJourney();
 renderProjects();
 renderGames();
 initContact();
 initNav();
+required("#dark-mode-toggle").append(renderDarkModeToggle());

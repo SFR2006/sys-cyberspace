@@ -14,18 +14,20 @@ const GAMES: { id: GameId; label: string; mount: (el: HTMLElement) => void }[] =
 export function renderGames(): void {
   const root = required("#games-root");
 
-  const panel = el("div", { className: "border border-cyber-border bg-cyber-panel/60 p-6 sm:p-8" });
-  const tabs = el("div", { className: "flex flex-wrap gap-2" });
+  const panel = el("div", { className: "border-2 border-paper-ink bg-paper-card/50 p-6 shadow-[8px_8px_0px_var(--shadow-md)] backdrop-blur sm:p-8" });
+  const tabs = el("div", { className: "mb-6 flex flex-wrap justify-center gap-3" });
 
   const mounted = new Set<GameId>();
 
   function activate(id: GameId) {
     for (const btn of [...tabs.children] as HTMLButtonElement[]) {
       const isActive = btn.dataset.game === id;
-      btn.classList.toggle("border-cyber-accent", isActive);
-      btn.classList.toggle("text-cyber-accent", isActive);
-      btn.classList.toggle("border-cyber-border", !isActive);
-      btn.classList.toggle("text-cyber-text-dim", !isActive);
+      btn.classList.toggle("bg-paper-ink", isActive);
+      btn.classList.toggle("text-paper-bg", isActive);
+      btn.classList.toggle("border-paper-ink", isActive);
+      btn.classList.toggle("bg-paper-card/60", !isActive);
+      btn.classList.toggle("text-paper-ink-soft", !isActive);
+      btn.classList.toggle("border-paper-ink/40", !isActive);
     }
     for (const game of GAMES) {
       const section = panel.querySelector<HTMLElement>(`[data-game-panel="${game.id}"]`);
@@ -40,7 +42,7 @@ export function renderGames(): void {
 
   for (const game of GAMES) {
     const btn = el("button", {
-      className: "border border-cyber-border bg-cyber-bg2 px-4 py-2 text-sm font-medium text-cyber-text-dim transition hover:text-cyber-accent2",
+      className: "border-2 border-paper-ink/40 bg-paper-card/60 px-5 py-2.5 font-serif text-base italic text-paper-ink-soft shadow-[3px_3px_0px_var(--shadow-sm)] transition-all hover:-translate-y-0.5",
       text: game.label,
       attrs: { type: "button", "data-game": game.id },
     });

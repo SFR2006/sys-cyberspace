@@ -67,11 +67,13 @@ function renderGoalCard(goal: Goal): HTMLElement {
   const fill = el("div", {
     className: "progress-fill flex h-full items-center justify-center bg-paper-ink text-xs font-bold text-paper-bg transition-[width] duration-300",
     text: `${goal.progress}%`,
-    attrs: { style: `width:${goal.progress}%` },
   });
+  // Set via the CSSOM (not an HTML `style=""` attribute) so this stays
+  // compatible with the site's script/style CSP — see src/lib/dom.ts.
+  fill.style.width = `${goal.progress}%`;
 
   const bar = el("div", {
-    className: "progress-bar mt-4 h-6 w-full cursor-pointer overflow-hidden border-2 border-paper-ink bg-white/50",
+    className: "progress-bar mt-4 h-6 w-full cursor-pointer overflow-hidden border-2 border-paper-ink bg-paper-card/50",
     attrs: { role: "button", tabindex: 0, "aria-label": `${goal.title} progress: ${goal.progress}%. Click to update.` },
     children: [fill],
   });
@@ -97,7 +99,7 @@ function renderGoalCard(goal: Goal): HTMLElement {
   });
 
   return el("div", {
-    className: "goal-card border-2 border-paper-ink bg-white/50 p-8 shadow-[6px_6px_0px_rgba(0,0,0,0.15)] backdrop-blur transition-all hover:-translate-y-1 hover:shadow-[10px_10px_0px_rgba(0,0,0,0.2)]",
+    className: "goal-card border-2 border-paper-ink bg-paper-card/50 p-8 shadow-[6px_6px_0px_var(--shadow-sm)] backdrop-blur transition-all hover:-translate-y-1 hover:shadow-[10px_10px_0px_var(--shadow-md)]",
     children: [
       el("h3", { className: "mb-4 text-center font-serif text-xl", text: goal.title }),
       el("p", { className: "text-left text-sm", text: goal.description }),
