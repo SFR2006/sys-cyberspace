@@ -64,6 +64,13 @@ html.dark .paper-texture {
   background-image: radial-gradient(circle, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
 }
 
+/* The logo PNG's ink is baked in as black pixels (transparent background) —
+   invert it in dark mode so it reads as white instead of vanishing against
+   the dark Syberspace background. */
+html.dark .logo-mark {
+  filter: invert(1);
+}
+
 html {
   transition: background-color 0.4s ease;
 }
