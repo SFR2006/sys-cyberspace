@@ -126,15 +126,66 @@ const PROJECTS: Project[] = [
   {
     id: "mta",
     title: "MTA Project",
-    summary: "More information coming soon!",
-    detailTitle: "MTA Project — Coming Soon",
+    summary:
+      "Designed an AI-assisted sourcing framework to help recruiters cut through thousands of low-relevance Boolean search results and quickly surface strong candidates for hard-to-fill technical roles.",
+    image: { src: "/mta.png", alt: "MTA Project thumbnail" },
+    detailTitle: "MTA Project — Full Details",
     sections: [
-      { heading: "Overview", paragraphs: ["Provide a comprehensive overview of your project. What inspired you to start this? What are you building and why?"] },
-      { heading: "Technologies Used", paragraphs: ["List all the technologies, frameworks, tools, and languages you're using. Explain why you chose them."] },
-      { heading: "Challenges & Solutions", paragraphs: ["What obstacles have you encountered? How did you overcome them? What did you learn in the process?"] },
-      { heading: "Current Status", paragraphs: ["Where are you in the development process? What have you completed and what's next?"] },
-      { heading: "Key Features", paragraphs: ["Describe the main features and functionality. What makes this project special or unique?"] },
-      { heading: "Future Plans", paragraphs: ["What are your plans for this project? How do you see it evolving?"] },
+      {
+        heading: "Overview",
+        paragraphs: [
+          "Collaborated in a team to address large-scale recruitment inefficiencies where traditional Boolean searches returned 3,000–10,000+ candidate profiles with low relevance for hard-to-fill technical roles. Designed an AI-assisted sourcing framework using prompt engineering and structured keyword extraction to improve search precision and recruiter workflow efficiency.",
+        ],
+      },
+      {
+        heading: "Technologies Used",
+        bullets: ["Prompt engineering", "Structured keyword extraction", "Boolean search string generation"],
+        paragraphs: [
+          "Developed prompting templates to analyze job descriptions, extract high-signal skills and realistic job titles, and generate tailored Boolean search strings.",
+        ],
+      },
+      {
+        heading: "Key Features",
+        bullets: [
+          "Reduced candidate search results by up to 90%, transforming thousands of profiles into a more focused and relevant candidate pool.",
+          "Automated extraction of high-signal skills and realistic job titles directly from job descriptions.",
+          "Tailored Boolean search strings generated to fit recruiter workflows.",
+        ],
+      },
+      {
+        heading: "Reflection",
+        paragraphs: [
+          "It was incredibly rewarding to see our framework being implemented and already helping identify candidates for interviews. Beyond the technical work, this experience gave me valuable insight into the recruitment process from the employer's perspective — lessons I now actively apply in my own job search.",
+        ],
+      },
+    ],
+  },
+  {
+    id: "morgan-stanley-hackathon",
+    title: "Morgan Stanley Hackathon",
+    summary:
+      "Selected as 1 of 100 participants from 2,200+ applicants for Morgan Stanley's Code to Give hackathon, where our team built Lemontree, a full-stack volunteer outreach platform for community flyering events that expand access to local food resources.",
+    image: { src: "/morgan_stanley.png", alt: "Morgan Stanley Code to Give hackathon project thumbnail" },
+    detailTitle: "Morgan Stanley Hackathon — Full Details",
+    sections: [
+      {
+        heading: "Overview",
+        paragraphs: [
+          "Selected as 1 of 100 participants from 2,200+ applicants to compete in Morgan Stanley's Code to Give hackathon. Collaborated in a cross-functional team of 10 to design and build a full-stack volunteer outreach platform for nonprofit organization Lemontree, aimed at improving coordination and scalability of community flyering events that help expand access to local food resources.",
+        ],
+      },
+      {
+        heading: "My Role",
+        paragraphs: [
+          "Led front-end wireframing, UI design, and development of responsive user interfaces for key platform flows including interactive map features, event discovery, and volunteer signup. Translated product ideas into functional components using modern frontend frameworks while partnering with backend developers to integrate event data and participation tracking features such as the leaderboard.",
+        ],
+      },
+      {
+        heading: "Reflection",
+        paragraphs: [
+          "This was my first experience contributing to a full-stack application while working with several new technologies. The hackathon pushed me outside my comfort zone, strengthened my ability to learn quickly in a collaborative environment, and reinforced my motivation to use technology to create a meaningful impact in local communities!",
+        ],
+      },
     ],
   },
 ];
@@ -201,7 +252,7 @@ function renderCard(project: Project, openModal: () => void): HTMLElement {
   if (project.image) {
     children.push(
       el("img", {
-        className: "mt-4 w-full border-2 border-paper-ink",
+        className: "mt-4 aspect-[16/10] w-full border-2 border-paper-ink object-cover",
         attrs: { src: project.image.src, alt: project.image.alt, loading: "lazy" },
       }),
     );
