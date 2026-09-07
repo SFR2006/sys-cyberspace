@@ -1,14 +1,14 @@
 import { el, required } from "../../lib/dom";
 import { mountCipherTerminal } from "./cipher-terminal";
 import { mountBreachCheck } from "./breach-check";
-import { mountCaseFile } from "./case-file";
+import { mountMystery } from "./mystery";
 
 type GameId = "cipher" | "breach" | "case";
 
 const GAMES: { id: GameId; label: string; mount: (el: HTMLElement) => void }[] = [
   { id: "cipher", label: "🔐 Cipher Terminal", mount: mountCipherTerminal },
   { id: "breach", label: "🔑 Breach Check", mount: mountBreachCheck },
-  { id: "case", label: "🕵️ Case File", mount: mountCaseFile },
+  { id: "case", label: "🕵️ Case File", mount: mountMystery },
 ];
 
 export function renderGames(): void {
