@@ -32,16 +32,16 @@ export const MYSTERY_CASE: MysteryCase = {
         options: ["Phishing email", "Scraping her public posts (OSINT)", "A leaked database of club members", "Malware on her phone"],
         answer: "Scraping her public posts (OSINT)",
       },
-      cipher: {
-        id: "ch1-flag",
-        type: "caesar",
+      challenge: {
+        category: "Crypto",
         difficulty: 1,
-        ciphertext: "ZFILY{WBISPJ_PZUA_WYPCHAL}",
+        data: "ZFILY{WBISPJ_PZUA_WYPCHAL}",
         answer: "SYBER{PUBLIC_ISNT_PRIVATE}",
-        hint: "Every letter's shifted forward by 7 — shift each one back by 7 to decode.",
+        hint: "Every letter's shifted forward by 7 — shift each one back by 7 to decode (a Caesar cipher).",
         explainer:
           "Nothing here was 'hacked' — it was all sitting in plain sight. Public posts are exactly that: public. Ghost_Iris didn't need to break in anywhere; she just paid attention.",
       },
+      taunt: "she left this scrambled note behind: \"crack it, and maybe i'll tell you who i am 🙂\"",
       clue: "Whoever this is doesn't need any special access yet — just patience and a public profile to read.",
     },
     {
@@ -63,16 +63,16 @@ export const MYSTERY_CASE: MysteryCase = {
         options: ["A hidden tracking cookie", "EXIF geolocation data left in the photo file", "Her phone carrier's records", "A friend tipped her off"],
         answer: "EXIF geolocation data left in the photo file",
       },
-      cipher: {
-        id: "ch2-flag",
-        type: "vigenere",
+      challenge: {
+        category: "Forensics",
         difficulty: 2,
-        ciphertext: "YFPWK{SLHSWGAO_FXBLF_DBKZ}",
+        data: "selfie_final2.jpg — EXIF data\nCamera: iPhone 14 Pro\nTaken: 2026-03-14 15:22:07\nGPS: 40.7291 N, 73.9965 W\nUserComment: U1lCRVJ7TUVUQURBVEFfTkVWRVJfTElFU30=",
         answer: "SYBER{METADATA_NEVER_LIES}",
-        hint: "The keyword is a 5-letter word for someone unseen: G H O S T.",
+        hint: "That UserComment field isn't normal text — it's Base64. Decode it.",
         explainer:
-          "Photos carry way more than the picture — camera model, timestamp, and often exact GPS coordinates, all invisible unless you go looking for them. Stripping metadata before posting is genuinely good advice, not just game flavor.",
+          "Base64 isn't encryption at all — it's just a reversible way to represent binary-safe text, and anyone who looks can decode it instantly. It shows up constantly in real forensics work, hiding in plain sight inside metadata fields exactly like this one.",
       },
+      taunt: '"crack this one too, if you\'re actually paying attention."',
       clue: "She's not just reading posts anymore — she's cross-referencing real-world details against them. That takes real attention, not luck.",
     },
     {
@@ -95,16 +95,16 @@ export const MYSTERY_CASE: MysteryCase = {
         options: ["Malware", "Account impersonation / social engineering", "A brute-forced password", "A supply-chain attack"],
         answer: "Account impersonation / social engineering",
       },
-      cipher: {
-        id: "ch3-flag",
-        type: "xor",
+      challenge: {
+        category: "Web",
         difficulty: 3,
-        ciphertext: "66 6c 77 70 67 4e 61 67 60 66 61 6a 77 60 61 6a 63 70 67 7c 73 6c 48",
+        data: "Fragment intercepted from the impersonator's traffic:\n%53%59%42%45%52%7b%54%52%55%53%54%5f%42%55%54%5f%56%45%52%49%46%59%7d",
         answer: "SYBER{TRUST_BUT_VERIFY}",
-        hint: "Every byte was XORed with the same key byte: ASCII '5' is 0x35.",
+        hint: "Every pair of digits after a % is a hex-encoded ASCII character — this is just URL (percent) encoding.",
         explainer:
-          "A convincing profile photo and a familiar username were enough to borrow someone's trust. Social engineering is almost never about breaking technology — it's about exploiting how people trust what looks familiar.",
+          "Percent-encoding isn't meant to hide anything — it's just how URLs safely represent characters they can't use directly. Plenty of real phishing links lean on the fact that most people never bother decoding what they click.",
       },
+      taunt: "\"still think you can catch me? decode this and find out.\"",
       clue: "She's confident enough now to impersonate Nora directly and fool people close to her — this isn't a stranger; she knows the friend group.",
     },
     {
@@ -123,16 +123,16 @@ export const MYSTERY_CASE: MysteryCase = {
         options: ["She guessed correctly", "Insider misuse of moderator-level access", "A phishing link Nora clicked", "A public code repository leak"],
         answer: "Insider misuse of moderator-level access",
       },
-      cipher: {
-        id: "ch4-flag",
-        type: "caesar",
-        difficulty: 2,
-        ciphertext: "FLORE{NPPRFF_VF_N_JRNCBA}",
+      challenge: {
+        category: "Logs",
+        difficulty: 4,
+        data: "Recovered from the server's deleted-message cache (raw bytes):\n11 1b 00 07 10 39 03 01 01 07 11 11 1d 0b 11 1d 03 1d 15 07 03 12 0d 0c 3f",
         answer: "SYBER{ACCESS_IS_A_WEAPON}",
-        hint: "The shift here is 13 — apply the same shift again to undo it.",
+        hint: "Every byte was XORed with the same key byte: ASCII 'B' is 0x42.",
         explainer:
-          "Fitting, given the message: getting cocky enough to quote a deleted message is exactly what narrows this down to a very short list of people — whoever this is has moderator access to the server.",
+          "Fitting, given the message: getting cocky enough to quote a deleted message is exactly what narrows this down to a very short list of people — whoever this is has moderator-level access to the server's deleted-message cache, raw bytes and all.",
       },
+      taunt: "\"go ahead. decode it. i already know you won't catch me.\"",
       clue: "This is the big one: only someone with moderator-level access to the 404 Not Found Discord could have seen that deleted message. That rules out anyone who isn't a mod in this server.",
     },
   ],

@@ -10,17 +10,6 @@ function normalize(s: string): string {
   return s.trim().toUpperCase().replace(/\s+/g, " ");
 }
 
-function typeLabel(type: MysteryChapter["cipher"]["type"]): string {
-  switch (type) {
-    case "caesar":
-      return "Caesar Shift";
-    case "vigenere":
-      return "Vigenère";
-    case "xor":
-      return "XOR (hex)";
-  }
-}
-
 /** A small line-art ghost mark for the anonymous stalker persona's avatar — keeps the
  * same stroke-based icon language as the rest of the site instead of an illustrated face. */
 function ghostIcon(): SVGSVGElement {
@@ -148,7 +137,7 @@ export function mountMystery(container: HTMLElement): void {
   function renderChapter(chapter: MysteryChapter) {
     const alreadySolved = solvedChapters.has(chapter.id);
     let choiceCorrect = alreadySolved;
-    let cipherCorrect = alreadySolved;
+    let challengeCorrect = alreadySolved;
 
     const choiceFeedback = el("p", { className: "mt-2 text-xs" });
     const select = el("select", {
@@ -164,12 +153,12 @@ export function mountMystery(container: HTMLElement): void {
       attrs: { type: "button" },
     });
 
-    const cipherInput = el("input", {
+    const challengeInput = el("input", {
       className: "w-full border-2 border-paper-ink bg-paper-card/70 px-3 py-2 font-sans text-paper-ink focus:outline-none focus:ring-2 focus:ring-paper-ink",
       attrs: { type: "text", placeholder: "Decoded flag, e.g. SYBER{...}", autocomplete: "off" },
     }) as HTMLInputElement;
-    cipherInput.spellcheck = false;
-    const cipherFeedback = el("p", { className: "mt-2 text-xs" });
+    challengeInput.spellcheck = false;
+    const challengeFeedback = el("p", { className: "mt-2 text-xs" });
     const hintBox = el("p", { className: "mt-2 hidden text-xs italic text-game-warn" });
     const explainerBox = el("p", { className: "mt-3 hidden border-t border-paper-ink/20 pt-3 text-xs text-paper-ink-soft" });
     const hintBtn = el("button", {
@@ -177,7 +166,7 @@ export function mountMystery(container: HTMLElement): void {
       text: "Show hint",
       attrs: { type: "button" },
     });
-    const cipherBtn = el("button", {
+    const challengeBtn = el("button", {
       className: "mt-2 border-2 border-paper-ink px-3 py-1.5 text-xs transition hover:-translate-y-0.5",
       text: "Decode",
       attrs: { type: "button" },
@@ -186,7 +175,7 @@ export function mountMystery(container: HTMLElement): void {
     const clueReveal = el("div", { className: "mt-4 hidden border-2 border-game-good/50 bg-game-good/10 p-3 text-sm text-game-good" });
 
     function checkSolved() {
-      if (choiceCorrect && cipherCorrect && !solvedChapters.has(chapter.id)) {
+      if (choiceCorrect && challengeCorrect && !solvedChapters.has(chapter.id)) {
         solvedChapters.add(chapter.id);
         persistSolved();
         clueReveal.textContent = `🔓 Clue unlocked: ${chapter.clue}`;
@@ -202,12 +191,12 @@ export function mountMystery(container: HTMLElement): void {
       choiceBtn.disabled = true;
       choiceFeedback.textContent = "✔ Correct";
       choiceFeedback.className = "mt-2 text-xs font-medium text-game-good";
-      cipherInput.value = chapter.cipher.answer;
-      cipherInput.disabled = true;
-      cipherBtn.disabled = true;
-      cipherFeedback.textContent = "✔ Decoded";
-      cipherFeedback.className = "mt-2 text-xs font-medium text-game-good";
-      explainerBox.textContent = chapter.cipher.explainer;
+      challengeInput.value = chapter.challenge.answer;
+      challengeInput.disabled = true;
+      challengeBtn.disabled = true;
+      challengeFeedback.textContent = "✔ Decoded";
+      challengeFeedback.className = "mt-2 text-xs font-medium text-game-good";
+      explainerBox.textContent = chapter.challenge.explainer;
       explainerBox.classList.remove("hidden");
       clueReveal.textContent = `🔓 Clue: ${chapter.clue}`;
       clueReveal.classList.remove("hidden");
@@ -232,23 +221,23 @@ export function mountMystery(container: HTMLElement): void {
       });
 
       hintBtn.addEventListener("click", () => {
-        hintBox.textContent = `Hint: ${chapter.cipher.hint}`;
+        hintBox.textContent = `Hint: ${chapter.challenge.hint}`;
         hintBox.classList.remove("hidden");
       });
 
-      cipherBtn.addEventListener("click", () => {
-        if (normalize(cipherInput.value) === normalize(chapter.cipher.answer)) {
-          cipherCorrect = true;
-          cipherInput.disabled = true;
-          cipherBtn.disabled = true;
-          cipherFeedback.textContent = "✔ Decoded";
-          cipherFeedback.className = "mt-2 text-xs font-medium text-game-good";
-          explainerBox.textContent = chapter.cipher.explainer;
+      challengeBtn.addEventListener("click", () => {
+        if (normalize(challengeInput.value) === normalize(chapter.challenge.answer)) {
+          challengeCorrect = true;
+          challengeInput.disabled = true;
+          challengeBtn.disabled = true;
+          challengeFeedback.textContent = "✔ Decoded";
+          challengeFeedback.className = "mt-2 text-xs font-medium text-game-good";
+          explainerBox.textContent = chapter.challenge.explainer;
           explainerBox.classList.remove("hidden");
           checkSolved();
         } else {
-          cipherFeedback.textContent = "✘ Not quite — try again, or grab a hint.";
-          cipherFeedback.className = "mt-2 text-xs font-medium text-game-bad";
+          challengeFeedback.textContent = "✘ Not quite — try again, or grab a hint.";
+          challengeFeedback.className = "mt-2 text-xs font-medium text-game-bad";
         }
       });
     }
@@ -267,11 +256,15 @@ export function mountMystery(container: HTMLElement): void {
       choiceFeedback,
 
       el("div", { className: "mt-5 border-t border-paper-ink/20 pt-4" }),
-      el("p", { className: "text-xs uppercase tracking-wider text-paper-ink-soft", text: `Chapter Flag · ${typeLabel(chapter.cipher.type)}` }),
-      el("p", { className: "mt-2 break-all border-2 border-dashed border-paper-ink/40 bg-paper-card/60 p-3 font-mono text-sm text-paper-ink", text: chapter.cipher.ciphertext }),
-      el("div", { className: "mt-2 flex flex-wrap gap-3", children: [cipherInput] }),
-      el("div", { children: [cipherBtn, hintBtn] }),
-      cipherFeedback,
+      el("p", { className: "text-xs uppercase tracking-wider text-paper-ink-soft", text: `Chapter Flag · ${chapter.challenge.category} · difficulty ${chapter.challenge.difficulty}` }),
+      el("p", { className: "mt-2 flex items-start gap-2 text-sm italic text-game-bad", children: [ghostIcon(), el("span", { text: chapter.taunt })] }),
+      el("p", {
+        className: "mt-2 whitespace-pre-line break-all border-2 border-dashed border-paper-ink/40 bg-paper-card/60 p-3 font-mono text-sm text-paper-ink",
+        text: chapter.challenge.data,
+      }),
+      el("div", { className: "mt-2 flex flex-wrap gap-3", children: [challengeInput] }),
+      el("div", { children: [challengeBtn, hintBtn] }),
+      challengeFeedback,
       hintBox,
       explainerBox,
       clueReveal,

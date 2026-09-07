@@ -19,9 +19,10 @@ export interface CipherPuzzle {
 // ---------------------------------------------------------------------
 // Case File: a single connected whodunnit ("Who Is Ghost_Iris?"), told
 // across linked chapters instead of disconnected one-off vignettes. Each
-// chapter reveals a technique (not a suspect) via chat-log evidence and a
-// cipher-encoded flag; the "who" is only decided in the finale lineup,
-// once every chapter's clue has narrowed the suspect pool.
+// chapter reveals a technique (not a suspect) via chat-log evidence and an
+// encoded flag — each chapter a different CTF category, escalating in
+// difficulty; the "who" is only decided in the finale lineup, once every
+// chapter's clue has narrowed the suspect pool.
 // ---------------------------------------------------------------------
 
 export interface ChatMessage {
@@ -40,6 +41,22 @@ export interface MysteryChoice {
   answer: string;
 }
 
+/** Each chapter's flag challenge is a different real CTF category — not
+ * the same cipher four times — escalating in difficulty as the case
+ * goes on: Crypto → Forensics → Web → Logs. */
+export type ChallengeCategory = "Crypto" | "Forensics" | "Web" | "Logs";
+
+export interface ChapterChallenge {
+  category: ChallengeCategory;
+  difficulty: 1 | 2 | 3 | 4;
+  /** The raw block shown to the player — ciphertext, an EXIF dump, an encoded fragment, raw hex. */
+  data: string;
+  /** The decoded flag, compared case-insensitively with whitespace trimmed. */
+  answer: string;
+  hint: string;
+  explainer: string;
+}
+
 export interface MysteryChapter {
   id: string;
   number: number;
@@ -50,8 +67,10 @@ export interface MysteryChapter {
   evidence: string[];
   /** "What technique was this?" — the one guessable category per chapter. */
   choice: MysteryChoice;
-  /** Decode this to reveal the chapter's flag. */
-  cipher: CipherPuzzle;
+  /** Crack this to reveal the chapter's flag. */
+  challenge: ChapterChallenge;
+  /** Ghost_Iris's own taunt, daring the player to decode her message — escalates with her confidence. */
+  taunt: string;
   /** Suspect-board clue unlocked once the chapter is fully solved. */
   clue: string;
 }
