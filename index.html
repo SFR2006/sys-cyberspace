@@ -10,20 +10,72 @@
 <body class="paper-gradient paper-texture relative min-h-screen overflow-x-hidden text-paper-ink">
 
   <!-- ============ NAV ============ -->
-  <nav class="fixed top-0 z-50 w-full border-b-2 border-paper-ink bg-paper-bg/95 py-5 shadow-[0_2px_20px_var(--shadow-sm)] backdrop-blur-md">
-    <ul class="flex flex-wrap items-center justify-center gap-6 sm:gap-12">
-      <li><a href="#home" class="nav-link font-serif italic text-paper-ink hover:opacity-70">Home</a></li>
-      <li><a href="#about" class="nav-link font-serif italic text-paper-ink hover:opacity-70">About</a></li>
-      <li><a href="#journey" class="nav-link font-serif italic text-paper-ink hover:opacity-70">Journey</a></li>
-      <li><a href="#projects" class="nav-link font-serif italic text-paper-ink hover:opacity-70">Projects</a></li>
-      <li><a href="#cyberspace" class="nav-link font-serif italic text-paper-ink hover:opacity-70">Syberspace 🔓</a></li>
-      <li><a href="#contact" class="nav-link font-serif italic text-paper-ink hover:opacity-70">Contact</a></li>
-    </ul>
+  <nav class="fixed top-0 z-50 w-full border-b-2 border-paper-ink bg-paper-bg/95 py-3 shadow-[0_2px_20px_var(--shadow-sm)] backdrop-blur-md">
+    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-6">
+      <a href="#cyberspace" aria-label="Syberspace home" class="shrink-0">
+        <img src="/syberspace-logo.png" alt="Syberspace" class="logo-mark h-9 w-auto sm:h-11" />
+      </a>
+      <ul class="flex flex-wrap items-center justify-center gap-6 sm:gap-8">
+        <li><a href="#home" class="nav-link font-serif italic text-paper-ink hover:opacity-70">Home</a></li>
+        <li><a href="#blog" class="nav-link font-serif italic text-paper-ink hover:opacity-70">Blog</a></li>
+        <li><a href="#about" class="nav-link font-serif italic text-paper-ink hover:opacity-70">About</a></li>
+        <li><a href="#projects" class="nav-link font-serif italic text-paper-ink hover:opacity-70">Projects</a></li>
+        <li><a href="#contact" class="nav-link font-serif italic text-paper-ink hover:opacity-70">Contact</a></li>
+      </ul>
+    </div>
   </nav>
 
   <main>
+    <!-- ============ CYBERSPACE (games zone) ============ -->
+    <section id="cyberspace" class="relative mx-auto flex min-h-screen w-full flex-col items-center justify-center border-b-4 border-paper-ink bg-paper-bg2/60 paper-texture px-6 py-20">
+      <div class="mx-auto max-w-5xl">
+        <h2 class="mb-4 flex justify-center">
+          <img src="/syber-games-logo.png" alt="The Syber Games" class="logo-mark h-auto w-full max-w-md sm:max-w-lg" />
+        </h2>
+        <div id="dark-mode-toggle" class="mb-10 flex justify-center"></div>
+        <div id="games-root"></div>
+      </div>
+    </section>
+
+    <!-- ============ BLOG ============ -->
+    <section id="blog" class="scroll-mt-24 mx-auto flex max-w-5xl flex-col items-center px-6 py-20">
+      <h2 class="mb-10 flex justify-center">
+        <img src="/lost-in-syberspace-logo.png" alt="Lost in Syberspace" class="logo-mark h-auto w-full max-w-xs sm:max-w-sm" />
+      </h2>
+      <div class="grid w-full grid-cols-1 gap-6 sm:grid-cols-3">
+        <div class="flex flex-col items-center gap-3 border-2 border-dashed border-paper-ink/40 bg-paper-card/40 p-8 text-center shadow-[6px_6px_0px_var(--shadow-sm)]">
+          <svg viewBox="0 0 24 24" class="h-8 w-8 text-paper-ink-soft" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5V6a2 2 0 0 1 2-2h9l5 5v10.5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" />
+            <path d="M15 4v4a1 1 0 0 0 1 1h4" />
+            <path d="M8 13h8M8 17h5" />
+          </svg>
+          <p class="font-serif text-lg italic">Coming soon</p>
+        </div>
+        <div class="flex flex-col items-center gap-3 border-2 border-dashed border-paper-ink/40 bg-paper-card/40 p-8 text-center shadow-[6px_6px_0px_var(--shadow-sm)]">
+          <svg viewBox="0 0 24 24" class="h-8 w-8 text-paper-ink-soft" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5V6a2 2 0 0 1 2-2h9l5 5v10.5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" />
+            <path d="M15 4v4a1 1 0 0 0 1 1h4" />
+            <path d="M8 13h8M8 17h5" />
+          </svg>
+          <p class="font-serif text-lg italic">Coming soon</p>
+        </div>
+        <div class="flex flex-col items-center gap-3 border-2 border-dashed border-paper-ink/40 bg-paper-card/40 p-8 text-center shadow-[6px_6px_0px_var(--shadow-sm)]">
+          <svg viewBox="0 0 24 24" class="h-8 w-8 text-paper-ink-soft" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5V6a2 2 0 0 1 2-2h9l5 5v10.5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" />
+            <path d="M15 4v4a1 1 0 0 0 1 1h4" />
+            <path d="M8 13h8M8 17h5" />
+          </svg>
+          <p class="font-serif text-lg italic">Coming soon</p>
+        </div>
+      </div>
+      <p class="mt-8 max-w-xl text-center text-paper-ink-soft">
+        Write-ups on cybersecurity concepts, CTF walkthroughs, and lessons from my cyber journey —
+        first posts dropping soon. Check back!
+      </p>
+    </section>
+
     <!-- ============ HERO ============ -->
-    <section id="home" class="relative mx-auto flex min-h-screen w-full max-w-6xl flex-col items-center justify-center overflow-hidden px-6 pb-16 pt-28 text-center">
+    <section id="home" class="scroll-mt-24 relative mx-auto flex min-h-screen w-full max-w-6xl flex-col items-center justify-center overflow-hidden px-6 pb-16 pt-28 text-center">
 
       <!-- Draggable "favorite things" stickers — rendered by src/sections/hero-doodles.ts.
            Hover for a caption, click for a little blurb, drag them anywhere you like. -->
@@ -82,22 +134,6 @@
       <h2 class="mb-10 text-center font-serif text-3xl italic sm:text-5xl">Current Projects</h2>
       <div id="project-grid" class="grid w-full grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
         <!-- project cards rendered by src/sections/projects.ts -->
-      </div>
-    </section>
-
-    <!-- ============ CYBERSPACE (games zone) ============ -->
-    <section id="cyberspace" class="scroll-mt-24 relative border-y-4 border-paper-ink bg-paper-bg2/60 paper-texture px-6 py-20">
-      <div class="mx-auto max-w-5xl">
-        <p class="mb-2 text-center font-serif text-lg italic text-paper-ink-soft">welcome to</p>
-        <h2 class="mb-4 flex justify-center">
-          <img src="/syberspace-logo.png" alt="Syberspace" class="logo-mark h-auto w-full max-w-[200px] sm:max-w-xs" />
-        </h2>
-        <p class="mx-auto mb-6 max-w-2xl text-center text-lg font-light leading-relaxed">
-          Three small games I built to make cybersecurity concepts hands-on. Everything below runs
-          entirely in your browser — nothing you type or click here is ever sent anywhere.
-        </p>
-        <div id="dark-mode-toggle" class="mb-10 flex justify-center"></div>
-        <div id="games-root"></div>
       </div>
     </section>
 
