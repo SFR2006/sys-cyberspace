@@ -1,10 +1,7 @@
 import { el } from "../../lib/dom";
-import { readJSON, writeJSON } from "../../lib/storage";
 import { cyberChefUrl } from "../../lib/cyberchef";
 import { CIPHER_PUZZLES } from "./cipher-data";
 import type { CipherPuzzle } from "../../types/games";
-
-const STORAGE_KEY = "cipher-terminal-solved";
 
 function normalize(s: string): string {
   return s.trim().toUpperCase().replace(/\s+/g, " ");
@@ -22,9 +19,9 @@ function typeLabel(type: CipherPuzzle["type"]): string {
 }
 
 export function mountCipherTerminal(container: HTMLElement): void {
-  let solved = new Set(readJSON<string[]>(STORAGE_KEY, []));
-
-  const persist = () => writeJSON(STORAGE_KEY, [...solved]);
+  // In-memory only, deliberately not persisted — every page load starts the
+  // games fresh instead of resuming a previous session's progress.
+  let solved = new Set<string>();
 
   const progressLabel = el("p", {
     className: "font-serif italic text-paper-ink-soft",
@@ -102,7 +99,6 @@ export function mountCipherTerminal(container: HTMLElement): void {
       explainerBox.classList.remove("hidden");
       if (!solved.has(puzzle.id)) {
         solved.add(puzzle.id);
-        persist();
         progressLabel.textContent = `${solved.size} / ${CIPHER_PUZZLES.length} decoded`;
         renderList();
       }

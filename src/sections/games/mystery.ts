@@ -1,11 +1,7 @@
 import { el } from "../../lib/dom";
-import { readJSON, writeJSON } from "../../lib/storage";
 import { cyberChefUrl } from "../../lib/cyberchef";
 import { MYSTERY_CASE, AVATARS } from "./mystery-data";
 import type { ChatMessage, MysteryChapter } from "../../types/games";
-
-const SOLVED_KEY = "mystery-solved-chapters";
-const FINALE_KEY = "mystery-finale-solved";
 
 function normalize(s: string): string {
   return s.trim().toUpperCase().replace(/\s+/g, " ");
@@ -72,17 +68,15 @@ function renderMessage(msg: ChatMessage): HTMLElement {
 
 export function mountMystery(container: HTMLElement): void {
   const mysteryCase = MYSTERY_CASE;
-  let solvedChapters = new Set(readJSON<string[]>(SOLVED_KEY, []));
-  let finaleSolved = readJSON<boolean>(FINALE_KEY, false);
+  // In-memory only, deliberately not persisted — every page load starts the
+  // case fresh instead of resuming a previous session's progress.
+  let solvedChapters = new Set<string>();
+  let finaleSolved = false;
   let activeId: string = mysteryCase.chapters[0].id;
 
   const tabsRow = el("div", { className: "mb-6 flex flex-wrap gap-2" });
   const clueBox = el("div", { className: "mb-6 border-2 border-paper-ink/20 bg-paper-bg/40 p-4" });
   const body = el("div", {});
-
-  function persistSolved() {
-    writeJSON(SOLVED_KEY, [...solvedChapters]);
-  }
 
   function chapterUnlocked(chapter: MysteryChapter): boolean {
     if (chapter.number === 1) return true;
@@ -186,7 +180,6 @@ export function mountMystery(container: HTMLElement): void {
     function checkSolved() {
       if (choiceCorrect && challengeCorrect && !solvedChapters.has(chapter.id)) {
         solvedChapters.add(chapter.id);
-        persistSolved();
         clueReveal.textContent = `🔓 Clue unlocked: ${chapter.clue}`;
         clueReveal.classList.remove("hidden");
         renderTabs();
@@ -388,7 +381,6 @@ export function mountMystery(container: HTMLElement): void {
           return;
         }
         finaleSolved = true;
-        writeJSON(FINALE_KEY, true);
         feedback.textContent = "";
         motiveSelect.disabled = true;
         accuseBtn.classList.add("hidden");
