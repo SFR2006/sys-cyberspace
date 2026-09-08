@@ -33,6 +33,10 @@ export interface ChatMessage {
   anonymous?: boolean;
   /** 1-4, escalating boldness across the case; only meaningful when `anonymous`. */
   intensity?: 1 | 2 | 3 | 4;
+  /** Key into the AVATARS photo map (see mystery-data.ts) — when set, shows a real
+   * portrait instead of the initial-letter/ghost fallback. Used to make the ch.3
+   * impersonation genuinely indistinguishable from Nora's own messages. */
+  avatarKey?: string;
 }
 
 export interface MysteryChoice {
@@ -83,6 +87,8 @@ export interface Suspect {
   isCulprit: boolean;
   /** Why they're cleared (red herrings) or how they're confirmed (the culprit) — shown after the accusation. */
   clearing: string;
+  /** Key into the AVATARS photo map (see mystery-data.ts). */
+  avatarKey: string;
 }
 
 export interface MysteryCase {

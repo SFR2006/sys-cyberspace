@@ -6,6 +6,15 @@ import type { MysteryCase } from "../../types/games";
 // patterns (public-post scraping, EXIF leaks, impersonation, insider
 // misuse), told as one connected case instead of a disconnected vignette.
 
+/** Portrait photos for the chat bubbles and suspect lineup — keyed by character, not by suspect id. */
+export const AVATARS: Record<string, string> = {
+  nora: "/avatar-nora.png",
+  priya: "/avatar-priya.png",
+  devon: "/avatar-devon.png",
+  sam: "/avatar-sam.png",
+  suki: "/avatar-suki.png",
+};
+
 export const MYSTERY_CASE: MysteryCase = {
   title: "Who Is Ghost_Iris?",
   subtitle: "A Syberspace Mystery",
@@ -21,7 +30,9 @@ export const MYSTERY_CASE: MysteryCase = {
       messages: [
         { sender: "Ghost_Iris", anonymous: true, intensity: 1, text: "just wanted to say hi 🙂 i think we'd get along" },
         { sender: "Ghost_Iris", anonymous: true, intensity: 1, text: "you always post the funniest stuff lol" },
-        { sender: "Nora", text: "??? who is this. do we know each other" },
+        { sender: "Nora", avatarKey: "nora", text: "lol ok nice try, is this you being weird again Sam?" },
+        { sender: "Ghost_Iris", anonymous: true, intensity: 1, text: "not who you think 🙂" },
+        { sender: "Nora", avatarKey: "nora", text: "...wait who is this. do we know each other" },
       ],
       evidence: [
         "Ghost_Iris's account was created two days ago with zero followers and zero posts of its own.",
@@ -52,7 +63,7 @@ export const MYSTERY_CASE: MysteryCase = {
         "Nora posts an untagged selfie from Tea & Honey, a café near campus. An hour later, Ghost_Iris name-drops the exact place.",
       messages: [
         { sender: "Ghost_Iris", anonymous: true, intensity: 2, text: "saw you at tea & honey today, cute jacket btw" },
-        { sender: "Nora", text: "i never said where i was. i didn't tag the location. how does she know that" },
+        { sender: "Nora", avatarKey: "nora", text: "i never said where i was. i didn't tag the location. how does she know that" },
       ],
       evidence: [
         "The selfie's image file still carried its original EXIF metadata, including embedded GPS coordinates.",
@@ -80,10 +91,11 @@ export const MYSTERY_CASE: MysteryCase = {
       number: 3,
       title: "The Copycat DM",
       briefing:
-        'A message goes out from what looks like Nora\'s own account, asking a friend in 404 Not Found for her class schedule "to plan a surprise." Nora never sent it.',
+        "A message goes out from what looks exactly like Nora's own account, asking a friend in 404 Not Found for her class schedule \"to plan a surprise.\" Nora never sent it — same name, same photo, everything.",
       messages: [
-        { sender: '"Nora" (fake)', anonymous: true, intensity: 2, text: "hey can you send me your tues/thurs schedule again? planning something 👀" },
+        { sender: "Nora", avatarKey: "nora", text: "hey can you send me your tues/thurs schedule again? planning something 👀" },
         { sender: "Friend", text: "omg yes obviously, here—" },
+        { sender: "Nora", avatarKey: "nora", text: "wait... why do you have my profile picture? who is this?" },
         { sender: "Ghost_Iris", anonymous: true, intensity: 3, text: "your friends are so easy to fool lol" },
       ],
       evidence: [
@@ -138,13 +150,14 @@ export const MYSTERY_CASE: MysteryCase = {
   ],
   suspects: [
     {
-      id: "jordan",
-      name: "Jordan Alvarez",
+      id: "devon",
+      name: "Devon Alvarez",
       role: "Former 404 Not Found co-president candidate",
       motive: "Lost the last club election to Nora and never quite let it go.",
       isCulprit: false,
+      avatarKey: "devon",
       clearing:
-        "Jordan was traveling out of state for a family event during the Tea & Honey incident — flight records and a dozen dated photos confirm it. He's also never held a moderator role in the server.",
+        "Devon was traveling out of state for a family event during the Tea & Honey incident — flight records and a dozen dated photos confirm it. She's also never held a moderator role in the server.",
     },
     {
       id: "sam",
@@ -152,17 +165,19 @@ export const MYSTERY_CASE: MysteryCase = {
       role: "404 Not Found member, hackathon teammate",
       motive: "Publicly clashed with Nora after a hackathon loss.",
       isCulprit: false,
+      avatarKey: "sam",
       clearing:
         "Server logs from the exact night of the impersonation incident show Sam actively defending Nora in the group chat, not attacking her. He's a regular member with no moderator permissions.",
     },
     {
-      id: "devon",
-      name: "Devon Reyes",
+      id: "suki",
+      name: "Suki Reyes",
       role: "President of ByteForce, 404 Not Found's rival club",
       motive: "Lost last year's CTF Nationals to Nora's team by a single point.",
       isCulprit: false,
+      avatarKey: "suki",
       clearing:
-        "Devon's real messages are formally punctuated with no emojis — nothing like Ghost_Iris's casual, lowercase tone — and he publicly congratulated Nora's team after the loss. He was also never a member of 404 Not Found's server, so he never had access to it.",
+        "Suki's real messages are formally punctuated with no emojis — nothing like Ghost_Iris's casual, lowercase tone — and she publicly congratulated Nora's team after the loss. She was also never a member of 404 Not Found's server, so she never had access to it.",
     },
     {
       id: "priya",
@@ -170,6 +185,7 @@ export const MYSTERY_CASE: MysteryCase = {
       role: "404 Not Found member, handles Discord onboarding & moderation",
       motive: "Obsessive fixation — the attention and control, not revenge or money.",
       isCulprit: true,
+      avatarKey: "priya",
       clearing:
         "Priya is one of the only members with moderator access to the server — able to see deleted messages. Her real messages in the club chat use the exact same lowercase, emoji-heavy tone as Ghost_Iris, down to identical typos. Each time she went further and nothing happened, she got a little more confident she'd never get caught — until quoting that deleted message gave her away.",
     },

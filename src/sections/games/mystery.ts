@@ -1,6 +1,6 @@
 import { el } from "../../lib/dom";
 import { readJSON, writeJSON } from "../../lib/storage";
-import { MYSTERY_CASE } from "./mystery-data";
+import { MYSTERY_CASE, AVATARS } from "./mystery-data";
 import type { ChatMessage, MysteryChapter } from "../../types/games";
 
 const SOLVED_KEY = "mystery-solved-chapters";
@@ -51,12 +51,15 @@ function intensityClasses(intensity: 1 | 2 | 3 | 4 = 1): string {
 }
 
 function renderMessage(msg: ChatMessage): HTMLElement {
-  const avatar = msg.anonymous
-    ? el("span", { className: "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-game-bad/60 bg-paper-bg/60 text-game-bad", children: [ghostIcon()] })
-    : el("span", {
-        className: "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-paper-ink bg-paper-card/70 font-serif text-sm italic",
-        text: msg.sender.charAt(0).toUpperCase(),
-      });
+  const photo = msg.avatarKey ? AVATARS[msg.avatarKey] : undefined;
+  const avatar = photo
+    ? el("img", { className: "h-8 w-8 shrink-0 rounded-full border-2 border-paper-ink object-cover", attrs: { src: photo, alt: msg.sender } })
+    : msg.anonymous
+      ? el("span", { className: "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-game-bad/60 bg-paper-bg/60 text-game-bad", children: [ghostIcon()] })
+      : el("span", {
+          className: "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-paper-ink bg-paper-card/70 font-serif text-sm italic",
+          text: msg.sender.charAt(0).toUpperCase(),
+        });
 
   const bubble = el("div", {
     className: `border-2 px-3 py-2 text-sm ${msg.anonymous ? intensityClasses(msg.intensity) : "border-paper-ink/30 bg-paper-card/50 text-paper-ink"}`,
@@ -295,14 +298,19 @@ export function mountMystery(container: HTMLElement): void {
       suspectCards.replaceChildren(
         ...mysteryCase.suspects.map((s) => {
           const card = el("button", {
-            className: `w-full border-2 p-4 text-left transition ${
+            className: `flex w-full items-start gap-3 border-2 p-4 text-left transition ${
               pickedSuspect === s.id ? "border-paper-ink bg-paper-ink/5 -translate-y-0.5" : "border-paper-ink/30 bg-paper-card/40 hover:border-paper-ink"
             }`,
             attrs: { type: "button" },
             children: [
-              el("p", { className: "font-serif text-base italic", text: s.name }),
-              el("p", { className: "mt-1 text-xs text-paper-ink-soft", text: s.role }),
-              el("p", { className: "mt-2 text-sm text-paper-ink", text: s.motive }),
+              el("img", { className: "h-14 w-14 shrink-0 rounded-full border-2 border-paper-ink object-cover", attrs: { src: AVATARS[s.avatarKey], alt: s.name } }),
+              el("div", {
+                children: [
+                  el("p", { className: "font-serif text-base italic", text: s.name }),
+                  el("p", { className: "mt-1 text-xs text-paper-ink-soft", text: s.role }),
+                  el("p", { className: "mt-2 text-sm text-paper-ink", text: s.motive }),
+                ],
+              }),
             ],
           });
           card.addEventListener("click", () => {
@@ -316,6 +324,10 @@ export function mountMystery(container: HTMLElement): void {
     }
 
     function showReveal() {
+      const culprit = mysteryCase.suspects.find((s) => s.isCulprit);
+      const copycatChapter = mysteryCase.chapters.find((c) => c.id === "the-copycat");
+      const impersonationText = copycatChapter?.messages[0]?.text;
+
       revealBox.classList.remove("hidden");
       revealBox.replaceChildren(
         el("div", {
@@ -323,7 +335,16 @@ export function mountMystery(container: HTMLElement): void {
           text: "CASE CLOSED",
         }),
         el("p", { className: "text-sm text-paper-ink", text: mysteryCase.finaleReveal }),
-        el("p", { className: "mt-4 text-xs uppercase tracking-wider text-paper-ink-soft", text: "Full debrief" }),
+
+        ...(culprit && impersonationText
+          ? [
+              el("p", { className: "mt-6 text-xs uppercase tracking-wider text-paper-ink-soft", text: "Unmasked" }),
+              el("p", { className: "mt-2 mb-2 text-sm text-paper-ink-soft", text: '"Nora" in The Copycat DM was never Nora at all:' }),
+              renderMessage({ sender: culprit.name, avatarKey: culprit.avatarKey, text: impersonationText }),
+            ]
+          : []),
+
+        el("p", { className: "mt-6 text-xs uppercase tracking-wider text-paper-ink-soft", text: "Full debrief" }),
         el("ul", {
           className: "mt-2 list-disc space-y-2 pl-5 text-sm text-paper-ink",
           children: mysteryCase.suspects.map((s) => el("li", { children: [el("strong", { text: `${s.name}: ` }), document.createTextNode(s.clearing)] })),
