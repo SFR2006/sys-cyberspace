@@ -4,8 +4,8 @@ Syeda Rahman's personal site — a portfolio (About, Cyber Journey, Projects, Co
 **Syberspace**, a small collection of original browser-based cybersecurity games:
 
 - 🔐 **Cipher Terminal** — decode Caesar, Vigenère, and XOR ciphers, with a short explainer on how each one actually works.
-- 🔑 **Breach Check** — a live password strength / crack-time estimator. Nothing typed there ever leaves the browser.
-- 🕵️ **Case File** — a Wordle-shaped mini investigation: read the evidence, then guess the compromised asset, attack vector, threat actor, and motive behind a (fictional) incident.
+- 🔑 **Breach Check** — a live password strength / crack-time estimator that also checks Have I Been Pwned's real breach database via k-anonymity (only a 5-character hash prefix is ever sent — never the password).
+- 🕵️ **Case File** — "Who Is Ghost_Iris?", a connected whodunnit told across linked chapters: read the evidence, crack an escalating series of CTF-style flags (Crypto → Forensics → Web → Logs), and accuse the culprit in the finale lineup. Entirely fictional.
 
 ## Stack
 
@@ -29,4 +29,8 @@ npm run preview   # serve the production build locally
   `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`, HSTS).
 - All dynamic content is inserted via `textContent`/DOM APIs (see `src/lib/dom.ts`) —
   `innerHTML` is never used with data that originated from user input.
+- The one intentional outbound request is Breach Check's live HIBP lookup
+  (`connect-src` allowlists `api.pwnedpasswords.com` specifically) — it uses the
+  Pwned Passwords "range" API's k-anonymity model, so only a 5-character hash
+  prefix ever leaves the browser, never the password or its full hash.
 - `public/.well-known/security.txt` gives a contact path for anyone who finds a real issue.

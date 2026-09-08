@@ -100,6 +100,7 @@ body,
 @layer base {
   html {
     scroll-behavior: smooth;
+    background-color: var(--color-paper-bg);
   }
 
   body {
@@ -179,6 +180,51 @@ body,
 
 @media (prefers-reduced-motion: reduce) {
   .doodle {
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Breach Check jolt: a full-viewport red flash + a violent page shake,
+   fired once when a typed password is confirmed compromised (either by
+   the local common-password list or a live Have I Been Pwned hit).
+   Disabled under prefers-reduced-motion — flashing red plus large,
+   fast motion is a real photosensitive/vestibular trigger, not just a
+   style choice, so that guard stays regardless of how loud the effect
+   is otherwise meant to be.
+------------------------------------------------------------------------ */
+.breach-flash-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background: var(--color-game-bad);
+  opacity: 0;
+}
+
+.breach-flash-overlay--active {
+  animation: breach-flash 0.5s ease-out;
+}
+
+@keyframes breach-flash {
+  0% { opacity: 0.75; }
+  100% { opacity: 0; }
+}
+
+.breach-shake {
+  animation: breach-shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+@keyframes breach-shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0) rotate(-0.3deg); }
+  20%, 80% { transform: translate3d(3px, 0, 0) rotate(0.4deg); }
+  30%, 50%, 70% { transform: translate3d(-8px, 0, 0) rotate(-1.2deg); }
+  40%, 60% { transform: translate3d(8px, 0, 0) rotate(1.2deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .breach-flash-overlay--active,
+  .breach-shake {
     animation: none;
   }
 }

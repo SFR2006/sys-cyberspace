@@ -20,7 +20,8 @@ function poolSize(password: string): number {
 /** A simple, honest approximation: entropy = length * log2(character pool
  * size). This assumes random generation from the detected pool — a real
  * human-chosen password is usually *much* weaker than this number implies,
- * which is exactly why the common-password check below matters more. */
+ * which is exactly why the common-password / breach checks below matter
+ * more. */
 function estimateBits(password: string): number {
   const pool = poolSize(password);
   if (pool === 0 || password.length === 0) return 0;
@@ -72,6 +73,70 @@ function crackTime(bits: number, guessesPerSecond: number): string {
   return formatDuration(seconds);
 }
 
+/** SHA-1 hex digest via the browser's Web Crypto API. SHA-1 is used only
+ * because that's the hash HIBP's Pwned Passwords API is keyed on — it has
+ * nothing to do with this being "secure" in any modern sense. */
+async function sha1Hex(text: string): Promise<string> {
+  const bytes = new TextEncoder().encode(text);
+  const digest = await crypto.subtle.digest("SHA-1", bytes);
+  return Array.from(new Uint8Array(digest))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("")
+    .toUpperCase();
+}
+
+/** Queries Have I Been Pwned's Pwned Passwords "range" API using
+ * k-anonymity: we hash the password locally and send only the first 5 hex
+ * characters of that hash. HIBP replies with every suffix it knows that
+ * shares that prefix (usually several hundred), and we check for a match
+ * locally — so the full password, and even its full hash, never leaves
+ * the browser. Returns how many times the exact password has been seen
+ * across known breaches (0 = not found). Throws on network/HTTP failure. */
+async function fetchPwnedCount(password: string, signal: AbortSignal): Promise<number> {
+  const hash = await sha1Hex(password);
+  const prefix = hash.slice(0, 5);
+  const suffix = hash.slice(5);
+  const res = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`, { signal });
+  if (!res.ok) throw new Error(`HIBP responded ${res.status}`);
+  const body = await res.text();
+  for (const line of body.split("\n")) {
+    const [lineSuffix, count] = line.trim().split(":");
+    if (lineSuffix === suffix) return Number(count) || 0;
+  }
+  return 0;
+}
+
+function getBreachOverlay(): HTMLDivElement {
+  let overlay = document.getElementById("breach-flash-overlay") as HTMLDivElement | null;
+  if (!overlay) {
+    overlay = document.createElement("div");
+    overlay.id = "breach-flash-overlay";
+    overlay.className = "breach-flash-overlay";
+    document.body.appendChild(overlay);
+  }
+  return overlay;
+}
+
+/** Full-screen red flash + page shake. Fired once each time a typed
+ * password newly resolves as breached — see the `lastBreached`
+ * edge-detection in `update()` — not on every keystroke while it stays
+ * breached. `prefers-reduced-motion` disables the actual animation via
+ * CSS (see style.css); this just (re)triggers it. */
+function triggerBreachEffect() {
+  const overlay = getBreachOverlay();
+  overlay.classList.remove("breach-flash-overlay--active");
+  void overlay.offsetWidth; // restart the animation even if one is already mid-flight
+  overlay.classList.add("breach-flash-overlay--active");
+
+  const root = document.documentElement;
+  root.classList.remove("breach-shake");
+  void root.offsetWidth;
+  root.classList.add("breach-shake");
+  window.setTimeout(() => root.classList.remove("breach-shake"), 500);
+}
+
+const HIBP_DEBOUNCE_MS = 500;
+
 export function mountBreachCheck(container: HTMLElement): void {
   const input = el("input", {
     className: "w-full border-2 border-paper-ink bg-paper-card/70 px-3 py-3 font-mono text-lg text-paper-ink focus:outline-none focus:ring-2 focus:ring-paper-ink",
@@ -85,17 +150,86 @@ export function mountBreachCheck(container: HTMLElement): void {
 
   const commonWarning = el("p", { className: "mt-3 hidden border-2 border-game-bad bg-game-bad/10 px-3 py-2 text-sm text-game-bad" });
 
+  const hibpStatus = el("p", { className: "mt-3 hidden text-sm" });
+
   const fastRow = el("p", { className: "text-sm text-paper-ink-soft" });
   const slowRow = el("p", { className: "text-sm text-paper-ink-soft" });
   const scenarios = el("div", { className: "mt-4 space-y-1 border-t border-paper-ink/20 pt-4", children: [fastRow, slowRow] });
 
   const tips = el("ul", { className: "mt-4 list-disc space-y-1 pl-5 text-sm text-paper-ink-soft" });
 
+  // Live HIBP check state. `hibpCount`/`hibpCheckedFor` cache the last
+  // resolved result and which input value it belongs to, so a slow
+  // response that arrives after further typing is never applied to the
+  // wrong password.
+  let hibpTimer: ReturnType<typeof setTimeout> | undefined;
+  let hibpAbort: AbortController | undefined;
+  let hibpCount: number | null = null;
+  let hibpCheckedFor = "";
+  // Edge-detection for the flash/shake effect: only fire it the moment a
+  // password *becomes* breached, not on every keystroke while it stays so.
+  let lastBreached = false;
+
+  function setHibpStatus(text: string, tone: "muted" | "bad" = "muted") {
+    hibpStatus.classList.remove("hidden");
+    hibpStatus.className = `mt-2 text-sm ${tone === "bad" ? "font-semibold text-game-bad" : "text-paper-ink-soft"}`;
+    hibpStatus.textContent = text;
+  }
+
+  function resetHibpState() {
+    clearTimeout(hibpTimer);
+    hibpAbort?.abort();
+    hibpCount = null;
+    hibpCheckedFor = "";
+    hibpStatus.classList.add("hidden");
+    hibpStatus.textContent = "";
+  }
+
+  function scheduleHibpCheck(value: string) {
+    clearTimeout(hibpTimer);
+    hibpAbort?.abort();
+
+    if (value.length === 0) {
+      resetHibpState();
+      return;
+    }
+    if (!window.isSecureContext || !crypto.subtle) {
+      setHibpStatus("Live breach checking needs a secure (HTTPS) connection — skipped.");
+      return;
+    }
+
+    setHibpStatus("Checking against Have I Been Pwned…");
+    const controller = new AbortController();
+    hibpAbort = controller;
+    hibpTimer = setTimeout(async () => {
+      try {
+        const count = await fetchPwnedCount(value, controller.signal);
+        if (controller.signal.aborted || input.value !== value) return;
+        hibpCount = count;
+        hibpCheckedFor = value;
+        if (count > 0) {
+          setHibpStatus(`⚠ Seen in ${count.toLocaleString()} real-world breach${count === 1 ? "" : "es"} tracked by Have I Been Pwned — change it now.`, "bad");
+        } else {
+          setHibpStatus("✓ Not found in Have I Been Pwned's breach corpus (that alone doesn't make it a good password).");
+        }
+        update();
+      } catch {
+        if (controller.signal.aborted) return;
+        setHibpStatus("Couldn't reach Have I Been Pwned — showing the local common-password check only.");
+      }
+    }, HIBP_DEBOUNCE_MS);
+  }
+
   function update() {
     const value = input.value;
     const bits = estimateBits(value);
     const isCommon = value.length > 0 && COMMON_PASSWORDS.has(value.toLowerCase());
-    const strength = classify(isCommon ? 0 : bits);
+    const isPwned = hibpCheckedFor === value && (hibpCount ?? 0) > 0;
+    const breached = isCommon || isPwned;
+    const strength = classify(breached ? 0 : bits);
+
+    if (breached && !lastBreached) triggerBreachEffect();
+    lastBreached = breached;
 
     barFill.className = `h-full transition-all duration-200 ${strength.color}`;
     barFill.style.width = value.length === 0 ? "0%" : `${strength.widthPct}%`;
@@ -110,10 +244,11 @@ export function mountBreachCheck(container: HTMLElement): void {
       fastRow.textContent = "";
       slowRow.textContent = "";
       tips.replaceChildren();
+      resetHibpState();
       return;
     }
 
-    const effectiveBits = isCommon ? 0 : bits;
+    const effectiveBits = breached ? 0 : bits;
     fastRow.textContent = `Fast offline attack (~10 billion guesses/sec): ${crackTime(effectiveBits, 1e10)}`;
     slowRow.textContent = `Slow, properly-hashed login (~10 guesses/sec): ${crackTime(effectiveBits, 10)}`;
 
@@ -123,19 +258,26 @@ export function mountBreachCheck(container: HTMLElement): void {
     if (!/[0-9]/.test(value)) tipList.push("Add a number or two.");
     if (!/[^a-zA-Z0-9]/.test(value)) tipList.push("Add a symbol — it widens the character pool an attacker must search.");
     if (isCommon) tipList.push("Avoid real words, names, and anything on a common-password list — use a passphrase of unrelated words instead.");
+    if (isPwned && !isCommon) tipList.push("This exact password has leaked in a real breach before — treat it as burned and pick something new, however 'strong' it looks.");
     if (tipList.length === 0) tipList.push("Looking solid! A password manager can generate and remember something even stronger.");
     tips.replaceChildren(...tipList.map((t) => el("li", { text: t })));
+
+    if (value !== hibpCheckedFor) scheduleHibpCheck(value);
   }
 
   input.addEventListener("input", update);
 
   container.replaceChildren(
     el("h3", { className: "font-serif text-xl italic", text: "Breach Check" }),
-    el("p", { className: "mt-2 text-sm text-paper-ink-soft", text: "A live password strength / crack-time estimator. Nothing you type here ever leaves your browser — it isn't logged, stored, or sent anywhere. (Please don't type a real password — use a throwaway example.)" }),
+    el("p", {
+      className: "mt-2 text-sm text-paper-ink-soft",
+      text: "A live password strength / crack-time estimator that also checks Have I Been Pwned's real breach database. Only 5 characters of a hash are ever sent — never the password itself, and nothing here is logged or stored. (Please don't type a real password — use a throwaway example.)",
+    }),
     el("div", { className: "mt-6", children: [input] }),
     bar,
     label,
     commonWarning,
+    hibpStatus,
     scenarios,
     tips,
   );
