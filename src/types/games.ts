@@ -94,6 +94,9 @@ export interface Suspect {
 export interface MysteryCase {
   title: string;
   subtitle: string;
+  /** A short, first-person note from the site's author, framing why this
+   * particular case exists — shown above the in-universe briefing. */
+  authorNote: string;
   intro: string;
   chapters: MysteryChapter[];
   suspects: Suspect[];

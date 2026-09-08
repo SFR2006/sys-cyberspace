@@ -424,7 +424,10 @@ export function mountMystery(container: HTMLElement): void {
   renderClues();
   container.replaceChildren(
     el("div", { children: [el("h3", { className: "font-serif text-xl italic", text: mysteryCase.title }), el("p", { className: "font-serif italic text-paper-ink-soft", text: mysteryCase.subtitle })] }),
-    el("p", { className: "mt-2 text-sm text-paper-ink-soft", text: mysteryCase.intro }),
+    el("p", { className: "mt-3 text-xs uppercase tracking-wider text-paper-ink-soft", text: "A note from me" }),
+    el("p", { className: "mt-1 border-l-4 border-paper-ink/30 bg-paper-card/40 py-2 pl-4 pr-2 text-sm italic text-paper-ink-soft", text: mysteryCase.authorNote }),
+    el("p", { className: "mt-4 text-xs uppercase tracking-wider text-paper-ink-soft", text: "The case" }),
+    el("p", { className: "mt-1 text-sm text-paper-ink-soft", text: mysteryCase.intro }),
     el("div", { className: "mt-6", children: [clueBox] }),
     tabsRow,
     body,

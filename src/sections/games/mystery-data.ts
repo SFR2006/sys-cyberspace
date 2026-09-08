@@ -18,6 +18,8 @@ export const AVATARS: Record<string, string> = {
 export const MYSTERY_CASE: MysteryCase = {
   title: "Who Is Ghost_Iris?",
   subtitle: "A Syberspace Mystery",
+  authorNote:
+    "A note before you start: my own path into cybersecurity actually started with true-crime podcasts — specifically the ones about cyberstalking and doxxing, where the culprit always ends up undone by their own digital trail. This case is my own spin on that: a fictional whodunnit built entirely out of real techniques instead of hacking-movie nonsense, so you can play detective the same way I first got hooked. — Syeda",
   intro:
     "Nora, a member of the campus coding club 404 Not Found, is being watched online by someone who knows too much. Work through each chapter's evidence, decode the flag hidden inside it, and once you've gathered enough, accuse the culprit in the finale.",
   chapters: [
