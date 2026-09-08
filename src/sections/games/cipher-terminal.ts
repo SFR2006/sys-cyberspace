@@ -1,5 +1,6 @@
 import { el } from "../../lib/dom";
 import { readJSON, writeJSON } from "../../lib/storage";
+import { cyberChefCaesarUrl } from "../../lib/cyberchef";
 import { CIPHER_PUZZLES } from "./cipher-data";
 import type { CipherPuzzle } from "../../types/games";
 
@@ -86,7 +87,16 @@ export function mountCipherTerminal(container: HTMLElement): void {
       attrs: { type: "submit" },
     });
 
-    const form = el("form", { className: "mt-4 flex flex-wrap gap-3", children: [input, submitBtn, hintBtn] });
+    const cyberChefLink = el("a", {
+      className: "self-center border-2 border-paper-ink/30 px-3 py-1.5 text-xs text-paper-ink-soft transition hover:border-paper-ink hover:text-paper-ink",
+      text: "Open in CyberChef ↗",
+      attrs: { href: cyberChefCaesarUrl(puzzle.ciphertext), target: "_blank", rel: "noopener noreferrer" },
+    });
+
+    const form = el("form", {
+      className: "mt-4 flex flex-wrap gap-3",
+      children: puzzle.type === "caesar" ? [input, submitBtn, hintBtn, cyberChefLink] : [input, submitBtn, hintBtn],
+    });
 
     const markSolved = () => {
       feedback.textContent = "✔ Correct — case decoded.";
