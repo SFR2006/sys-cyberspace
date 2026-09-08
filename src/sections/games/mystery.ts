@@ -10,10 +10,9 @@ function normalize(s: string): string {
   return s.trim().toUpperCase().replace(/\s+/g, " ");
 }
 
-/** A default-profile silhouette with a censor bar across the face — reads as a
- * redacted/stolen identity rather than a literal ghost, which fits the story
- * (she isn't supernatural, she's wearing pieces of someone else's identity). */
-function stolenIdentityIcon(): SVGSVGElement {
+/** A small line-art ghost mark for the anonymous stalker persona's avatar — keeps the
+ * same stroke-based icon language as the rest of the site instead of an illustrated face. */
+function ghostIcon(): SVGSVGElement {
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("viewBox", "0 0 24 24");
   svg.setAttribute("class", "h-5 w-5");
@@ -22,21 +21,19 @@ function stolenIdentityIcon(): SVGSVGElement {
   svg.setAttribute("stroke-width", "1.7");
   svg.setAttribute("stroke-linecap", "round");
   svg.setAttribute("stroke-linejoin", "round");
-  const head = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-  head.setAttribute("cx", "12");
-  head.setAttribute("cy", "9");
-  head.setAttribute("r", "3.5");
-  const shoulders = document.createElementNS("http://www.w3.org/2000/svg", "path");
-  shoulders.setAttribute("d", "M5 19.5c0-4.5 3.2-7 7-7s7 2.5 7 7");
-  const bar = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-  bar.setAttribute("x", "7.5");
-  bar.setAttribute("y", "7.8");
-  bar.setAttribute("width", "9");
-  bar.setAttribute("height", "2.4");
-  bar.setAttribute("rx", "0.5");
-  bar.setAttribute("fill", "currentColor");
-  bar.setAttribute("stroke", "none");
-  svg.append(head, shoulders, bar);
+  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path.setAttribute("d", "M5 20V11a7 7 0 0 1 14 0v9l-2.3-1.8L14.5 20l-2.5-1.8L9.5 20l-2.2-1.8Z");
+  const eye1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  eye1.setAttribute("cx", "9.5");
+  eye1.setAttribute("cy", "11");
+  eye1.setAttribute("r", "0.6");
+  eye1.setAttribute("fill", "currentColor");
+  const eye2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  eye2.setAttribute("cx", "14.5");
+  eye2.setAttribute("cy", "11");
+  eye2.setAttribute("r", "0.6");
+  eye2.setAttribute("fill", "currentColor");
+  svg.append(path, eye1, eye2);
   return svg;
 }
 
@@ -58,7 +55,7 @@ function renderMessage(msg: ChatMessage): HTMLElement {
   const avatar = photo
     ? el("img", { className: "h-8 w-8 shrink-0 rounded-full border-2 border-paper-ink object-cover", attrs: { src: photo, alt: msg.sender } })
     : msg.anonymous
-      ? el("span", { className: "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-game-bad/60 bg-paper-bg/60 text-game-bad", children: [stolenIdentityIcon()] })
+      ? el("span", { className: "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-game-bad/60 bg-paper-bg/60 text-game-bad", children: [ghostIcon()] })
       : el("span", {
           className: "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-paper-ink bg-paper-card/70 font-serif text-sm italic",
           text: msg.sender.charAt(0).toUpperCase(),
@@ -263,7 +260,7 @@ export function mountMystery(container: HTMLElement): void {
 
       el("div", { className: "mt-5 border-t border-paper-ink/20 pt-4" }),
       el("p", { className: "text-xs uppercase tracking-wider text-paper-ink-soft", text: `Chapter Flag · ${chapter.challenge.category} · difficulty ${chapter.challenge.difficulty}` }),
-      el("p", { className: "mt-2 flex items-start gap-2 text-sm italic text-game-bad", children: [stolenIdentityIcon(), el("span", { text: chapter.taunt })] }),
+      el("p", { className: "mt-2 flex items-start gap-2 text-sm italic text-game-bad", children: [ghostIcon(), el("span", { text: chapter.taunt })] }),
       el("p", {
         className: "mt-2 whitespace-pre-line break-all border-2 border-dashed border-paper-ink/40 bg-paper-card/60 p-3 font-mono text-sm text-paper-ink",
         text: chapter.challenge.data,
