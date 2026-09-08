@@ -1,6 +1,6 @@
 import { el } from "../../lib/dom";
 import { readJSON, writeJSON } from "../../lib/storage";
-import { cyberChefCaesarUrl } from "../../lib/cyberchef";
+import { cyberChefUrl } from "../../lib/cyberchef";
 import { MYSTERY_CASE, AVATARS } from "./mystery-data";
 import type { ChatMessage, MysteryChapter } from "../../types/games";
 
@@ -178,7 +178,7 @@ export function mountMystery(container: HTMLElement): void {
     const cyberChefLink = el("a", {
       className: "mt-2 ml-2 border-2 border-paper-ink/30 px-3 py-1.5 text-xs text-paper-ink-soft transition hover:border-paper-ink hover:text-paper-ink",
       text: "Open in CyberChef ↗",
-      attrs: { href: cyberChefCaesarUrl(chapter.challenge.data), target: "_blank", rel: "noopener noreferrer" },
+      attrs: { href: cyberChefUrl(chapter.challenge.data), target: "_blank", rel: "noopener noreferrer" },
     });
 
     const clueReveal = el("div", { className: "mt-4 hidden border-2 border-game-good/50 bg-game-good/10 p-3 text-sm text-game-good" });
@@ -272,7 +272,7 @@ export function mountMystery(container: HTMLElement): void {
         text: chapter.challenge.data,
       }),
       el("div", { className: "mt-2 flex flex-wrap gap-3", children: [challengeInput] }),
-      el("div", { children: chapter.challenge.category === "Crypto" ? [challengeBtn, hintBtn, cyberChefLink] : [challengeBtn, hintBtn] }),
+      el("div", { children: [challengeBtn, hintBtn, cyberChefLink] }),
       challengeFeedback,
       hintBox,
       explainerBox,
