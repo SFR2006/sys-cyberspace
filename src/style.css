@@ -64,6 +64,12 @@ html.dark .paper-texture {
   background-image: radial-gradient(circle, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
 }
 
+html.dark .paper-gradient.paper-texture {
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(135deg, var(--color-paper-bg) 0%, var(--color-paper-bg2) 100%);
+}
+
 /* The logo PNG's ink is baked in as black pixels (transparent background) —
    invert it in dark mode so it reads as white instead of vanishing against
    the dark Syberspace background. */
@@ -124,6 +130,16 @@ body,
 
 .paper-gradient {
   background: linear-gradient(135deg, var(--color-paper-bg) 0%, var(--color-paper-bg2) 100%);
+}
+
+/* .paper-gradient's `background` shorthand resets `background-image`, which quietly
+   erased the dots anywhere the two classes were combined (e.g. <body>, project modal
+   panels) — merge both images into one declaration for that case instead. */
+.paper-gradient.paper-texture {
+  background-image:
+    radial-gradient(circle, rgba(0, 0, 0, 0.15) 1px, transparent 1px),
+    linear-gradient(135deg, var(--color-paper-bg) 0%, var(--color-paper-bg2) 100%);
+  background-size: 30px 30px, auto;
 }
 
 /* Success-popup checkmark draw-on animation (ported from the original design) */
