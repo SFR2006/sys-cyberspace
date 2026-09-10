@@ -217,7 +217,7 @@ function renderModal(project: Project): HTMLElement {
     attrs: { id: `modal-${project.id}`, role: "dialog", "aria-modal": "true", "aria-label": project.detailTitle },
     children: [
       el("div", {
-        className: "modal-content relative max-h-[90vh] w-full max-w-3xl overflow-y-auto paper-gradient border-[3px] border-paper-ink p-8 shadow-[15px_15px_0px_var(--shadow-lg)] sm:p-12",
+        className: "modal-content relative max-h-[90vh] w-full max-w-3xl overflow-y-auto paper-gradient paper-texture border-[3px] border-paper-ink p-8 shadow-[15px_15px_0px_var(--shadow-lg)] sm:p-12",
         children: [
           closeBtn,
           el("h3", { className: "mb-6 text-center font-serif text-3xl", text: project.detailTitle }),
