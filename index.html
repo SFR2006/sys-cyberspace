@@ -79,10 +79,6 @@
     <!-- ============ HERO ============ -->
     <section id="home" class="scroll-mt-24 relative mx-auto flex min-h-screen w-full max-w-6xl flex-col items-center justify-center overflow-hidden px-6 pb-16 pt-28 text-center">
 
-      <!-- Draggable "favorite things" stickers — rendered by src/sections/hero-doodles.ts.
-           Hover for a caption, click for a little blurb, drag them anywhere you like. -->
-      <div id="hero-doodles" class="absolute inset-0 z-20 hidden lg:block" aria-hidden="false"></div>
-
       <div id="about-intro" class="relative z-10 mx-auto max-w-3xl scroll-mt-24">
         <h1 class="mb-4 font-serif text-5xl font-bold sm:text-7xl">Syeda Rahman</h1>
         <p class="mb-8 font-serif text-xl italic sm:text-2xl">Aspiring Cybersecurity Analyst</p>
@@ -94,6 +90,11 @@
           of the internet — including a few games I built myself over in
           <a href="#cyberspace" class="border-b-2 border-paper-ink italic">Syberspace</a>. :)
         </p>
+
+        <!-- "Favorite things" badges — rendered by src/sections/hero-doodles.ts.
+             Pop in one at a time once this comes into view; hover for a caption,
+             click for a little blurb. -->
+        <div id="hero-doodles" class="mt-10 flex flex-wrap items-center justify-center gap-5 sm:gap-6" aria-hidden="false"></div>
       </div>
     </section>
 
