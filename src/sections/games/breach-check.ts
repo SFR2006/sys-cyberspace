@@ -233,7 +233,12 @@ export function mountBreachCheck(container: HTMLElement): void {
 
     barFill.className = `h-full transition-all duration-200 ${strength.color}`;
     barFill.style.width = value.length === 0 ? "0%" : `${strength.widthPct}%`;
-    label.textContent = value.length === 0 ? "Start typing to see a live estimate." : `${strength.label} · ~${Math.round(bits)} bits estimated`;
+    if (value.length === 0) {
+      label.textContent = "Start typing to see a live estimate.";
+    } else {
+      const base = `${strength.label} · ~${Math.round(bits)} bits estimated`;
+      label.textContent = strength.color === "bg-game-good" ? `${base} — looks like a good password (for now).` : base;
+    }
 
     commonWarning.classList.toggle("hidden", !isCommon);
     if (isCommon) {
