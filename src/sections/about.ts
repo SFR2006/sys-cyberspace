@@ -2,6 +2,7 @@ import { el, required, clamp } from "../lib/dom";
 
 interface Goal {
   title: string;
+  icon: string;
   description: string;
   progress: number;
 }
@@ -9,76 +10,96 @@ interface Goal {
 const GOALS: Goal[] = [
   {
     title: "Learning Data Visualization",
-    description:
-      "One of my main goals for 2026 is to get comfortable and confident using Power BI and Tableau. I want to improve my skills in data visualization because these tools help you turn raw data into stories that people can actually understand and use. Nowadays, data drives a lot of decisions, so being able to present it clearly is really important. Learning this will help me make smarter choices and be more valuable in any job I do.",
+    icon: "📊",
+    description: "Improve my Power BI and Tableau skills to better turn data into clear, useful insights.",
     progress: 25,
   },
   {
     title: "CompTIA Security+ Certification",
-    description:
-      "One of my goals for 2026 is to earn my CompTIA Security+ (Sec+) certification. As a sophomore in college and someone fairly new to cybersecurity, I believe this certification will give me a solid foundation in the field. Cybersecurity is rapidly growing, and having this credential will help me develop essential skills and open up more opportunities for my future.",
+    icon: "🔐",
+    description: "Earn my CompTIA Security+ certification to strengthen my cybersecurity foundation and prepare for future opportunities.",
     progress: 50,
   },
   {
     title: "Networking Fundamentals",
-    description:
-      "Another one of my goals for 2026 is to build a solid understanding of networking fundamentals. I'm taking CIS3500 this spring, which will introduce me to the basics of networking. I think this knowledge is really important, especially as someone still exploring and finding my way in the tech field. Having a strong foundation in networking will help me better understand how systems communicate and improve my overall tech skills.",
+    icon: "🌐",
+    description: "Build a strong foundation in networking through CIS 3500 and hands-on practice.",
     progress: 10,
   },
   {
     title: "Hackathons",
-    description:
-      "In 2026 I hope to participate in more hackathons. I was able to join two hackathon-style competitions last year, and they were surprisingly really fun. I enjoyed the experience and working with others. I'm looking forward to getting involved in more because they're great opportunities to grow my skills, learn new things, and connect with people who share my interests.",
+    icon: "💻",
+    description: "Participate in more hackathons to build my technical skills, collaborate with others, and try new ideas.",
     progress: 75,
   },
   {
-    title: "Try Hack Me",
-    description:
-      "One of my goals for 2026 is to be more consistent in practicing cybersecurity on platforms like TryHackMe. I recently bought a subscription and want to regularly work through rooms, labs, and other challenges to build my hands-on skills. This will not only help me deepen my understanding of cyber concepts but also support my progress toward other goals, like earning my Security+ certification.",
+    title: "TryHackMe",
+    icon: "🎯",
+    description: "Stay consistent with TryHackMe to strengthen my hands-on cybersecurity skills through labs and challenges.",
     progress: 75,
   },
   {
     title: "GitHub Skills",
-    description:
-      "One of my goals for 2026 is to become more comfortable and confident using Git. I've been adding more projects to my repositories, and I want to improve my version control skills to better manage code and collaborate with others.",
+    icon: "🐙",
+    description: "Become more confident with Git and GitHub by consistently managing and contributing to projects.",
     progress: 75,
   },
   {
     title: "Cloud Computing",
-    description:
-      "I want to advance my knowledge of cloud computing platforms like AWS, Azure, and Google Cloud in 2026. I'm currently working through a SOAR & SIEM course on Google Cloud, which is helping me gain hands-on experience. Understanding cloud services is important for many tech roles, and building this experience will make me more versatile and prepared for future opportunities.",
+    icon: "☁️",
+    description: "Build my cloud computing knowledge through hands-on experience with platforms like AWS, Azure, and Google Cloud.",
     progress: 75,
   },
   {
     title: "Python & Machine Learning",
-    description:
-      "In 2026, I aim to strengthen my Python programming and explore machine learning concepts. I've applied to the Breakthrough Fellowship program and hope to advance these skills through hands-on projects and mentorship. This will help me gain practical experience and deepen my understanding of data science and AI.",
+    icon: "🐍",
+    description: "Strengthen my Python skills and gain hands-on experience with machine learning through projects and coursework.",
     progress: 75,
   },
   {
     title: "Automation & Scripting",
-    description:
-      "Another goal for 2026 is to improve my automation and scripting skills using tools like PowerShell or Bash. These skills are especially important in cybersecurity and could help me become more familiar with how Security Operations Centers (SOCs) work. Automating repetitive tasks will help me work more efficiently and better manage systems and workflows.",
+    icon: "⚙️",
+    description: "Improve my PowerShell and Bash skills to automate tasks and build a stronger foundation in cybersecurity operations.",
     progress: 75,
   },
 ];
 
+// Progress reads as a color-coded "health" tier, echoing the same
+// good/warn/bad accents used for game feedback in Syberspace.
+function tierColor(progress: number): string {
+  if (progress >= 60) return "var(--color-game-good)";
+  if (progress >= 30) return "var(--color-game-warn)";
+  return "var(--color-game-bad)";
+}
+
 function renderGoalCard(goal: Goal): HTMLElement {
-  const fill = el("div", {
-    className: "progress-fill flex h-full items-center justify-center bg-paper-ink text-xs font-bold text-paper-bg transition-[width] duration-300",
+  const badge = el("span", {
+    className: "flex h-9 min-w-11 items-center justify-center rounded-full border-2 px-2 text-xs font-bold",
     text: `${goal.progress}%`,
   });
-  // Set via the CSSOM (not an HTML `style=""` attribute) so this stays
-  // compatible with the site's script/style CSP — see src/lib/dom.ts.
+
+  const fill = el("div", {
+    className: "progress-fill h-full rounded-full transition-[width] duration-300",
+  });
   fill.style.width = `${goal.progress}%`;
 
   const bar = el("div", {
-    className: "progress-bar mt-4 h-6 w-full cursor-pointer overflow-hidden border-2 border-paper-ink bg-paper-card/50",
+    className: "progress-bar mt-5 h-2.5 w-full cursor-pointer overflow-hidden rounded-full border-2 border-paper-ink/30 bg-paper-bg/60",
     attrs: { role: "button", tabindex: 0, "aria-label": `${goal.title} progress: ${goal.progress}%. Click to update.` },
     children: [fill],
   });
 
   let progress = goal.progress;
+
+  // Set via the CSSOM, not an HTML `style=""` string — see the doodle
+  // styling note in hero-doodles.ts for why (the page's strict CSP).
+  const applyTier = (value: number) => {
+    const color = tierColor(value);
+    badge.style.color = color;
+    badge.style.borderColor = color;
+    fill.style.background = color;
+  };
+  applyTier(progress);
 
   const updateProgress = () => {
     const raw = window.prompt(`Current progress: ${progress}%. Enter new progress (0-100):`, String(progress));
@@ -86,7 +107,8 @@ function renderGoalCard(goal: Goal): HTMLElement {
     const parsed = clamp(Number(raw), 0, 100, progress);
     progress = Math.round(parsed);
     fill.style.width = `${progress}%`;
-    fill.textContent = `${progress}%`;
+    badge.textContent = `${progress}%`;
+    applyTier(progress);
     bar.setAttribute("aria-label", `${goal.title} progress: ${progress}%. Click to update.`);
   };
 
@@ -99,10 +121,15 @@ function renderGoalCard(goal: Goal): HTMLElement {
   });
 
   return el("div", {
-    className: "goal-card border-2 border-paper-ink bg-paper-card/50 p-8 shadow-[6px_6px_0px_var(--shadow-sm)] backdrop-blur transition-all hover:-translate-y-1 hover:shadow-[10px_10px_0px_var(--shadow-md)]",
+    className:
+      "goal-card flex flex-col border-2 border-paper-ink bg-paper-card/50 p-6 shadow-[6px_6px_0px_var(--shadow-sm)] backdrop-blur transition-all hover:-translate-y-1 hover:shadow-[10px_10px_0px_var(--shadow-md)]",
     children: [
-      el("h3", { className: "mb-4 text-center font-serif text-xl", text: goal.title }),
-      el("p", { className: "text-left text-sm", text: goal.description }),
+      el("div", {
+        className: "mb-3 flex items-center justify-between gap-3",
+        children: [el("span", { className: "text-3xl", text: goal.icon }), badge],
+      }),
+      el("h3", { className: "mb-2 font-serif text-lg", text: goal.title }),
+      el("p", { className: "text-left text-sm text-paper-ink-soft", text: goal.description }),
       bar,
     ],
   });
