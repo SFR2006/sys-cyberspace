@@ -190,6 +190,37 @@ const PROJECTS: Project[] = [
   },
 ];
 
+interface UpcomingProject {
+  title: string;
+  description: string;
+}
+
+// Placeholder cards for projects still in progress — no modal/detail page
+// yet, just a heads-up that something's coming.
+const UPCOMING_PROJECTS: UpcomingProject[] = [
+  {
+    title: "WitOmni × Break Through Tech",
+    description:
+      "Currently working on a machine learning project in partnership with Break Through Tech and WitOmni, a marketing tech startup.",
+  },
+  {
+    title: "Speech & Communication App",
+    description: "Another personal project I'm building — an app that helps with speech and better communication.",
+  },
+];
+
+function renderUpcomingCard(project: UpcomingProject): HTMLElement {
+  return el("div", {
+    className:
+      "flex flex-col items-center gap-3 border-2 border-dashed border-paper-ink/40 bg-paper-card/40 p-8 text-center shadow-[6px_6px_0px_var(--shadow-sm)]",
+    children: [
+      el("h3", { className: "font-serif text-xl", text: project.title }),
+      el("p", { className: "text-sm text-paper-ink-soft", text: project.description }),
+      el("p", { className: "mt-2 font-serif text-sm italic", text: "More to come soon" }),
+    ],
+  });
+}
+
 function renderDetailSection(section: DetailSection): HTMLElement {
   const children: HTMLElement[] = [el("h4", { className: "mb-3 mt-8 font-serif text-lg", text: section.heading })];
   if (section.bullets) {
@@ -291,5 +322,9 @@ export function renderProjects(): void {
     };
 
     grid.append(renderCard(project, openModal));
+  }
+
+  for (const upcoming of UPCOMING_PROJECTS) {
+    grid.append(renderUpcomingCard(upcoming));
   }
 }
