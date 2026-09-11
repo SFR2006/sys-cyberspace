@@ -89,7 +89,7 @@ function renderGoalCard(goal: Goal): HTMLElement {
     children: [
       photo,
       el("h3", { className: "mb-2 font-serif text-lg", text: goal.title }),
-      el("p", { className: "text-left text-sm text-paper-ink-soft", text: goal.description }),
+      el("p", { className: "text-center text-sm text-paper-ink-soft", text: goal.description }),
     ],
   });
 }

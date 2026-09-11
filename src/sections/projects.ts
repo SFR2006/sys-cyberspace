@@ -230,7 +230,7 @@ function renderDetailSection(section: DetailSection): HTMLElement {
   }
   if (section.paragraphs) {
     for (const para of section.paragraphs) {
-      children.push(el("p", { className: "mb-4 text-left", text: para }));
+      children.push(el("p", { className: "mb-4 text-center", text: para }));
     }
   }
   return el("div", { children });
@@ -278,7 +278,7 @@ function renderModal(project: Project): HTMLElement {
 function renderCard(project: Project, openModal: () => void): HTMLElement {
   const children: (HTMLElement | string)[] = [
     el("h3", { className: "mb-4 text-center font-serif text-xl", text: project.title }),
-    el("p", { className: "text-left text-sm", text: project.summary }),
+    el("p", { className: "text-center text-sm", text: project.summary }),
   ];
   if (project.image) {
     children.push(
