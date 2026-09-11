@@ -122,8 +122,8 @@ function renderMilestone(milestone: Milestone): HTMLElement {
     className: "timeline-item mb-8 border-2 border-paper-ink bg-paper-card/40 p-8 shadow-[6px_6px_0px_var(--shadow-sm)] backdrop-blur transition hover:translate-x-2",
     children: [
       el("h3", { className: "mb-1 font-serif text-xl", text: milestone.title }),
-      el("p", { className: "mb-4 font-serif text-sm italic text-paper-ink-soft", text: milestone.date }),
-      el("p", { className: "text-left", text: milestone.description }),
+      el("p", { className: "mb-4 font-serif text-sm italic text-paper-ink-soft text-center", text: milestone.date }),
+      el("p", { className: "text-center", text: milestone.description }),
       postItContainer,
     ],
   });
