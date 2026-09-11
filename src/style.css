@@ -173,9 +173,11 @@ body,
 }
 
 /* ---------------------------------------------------------------------
-   Hero "doodles" — scattered interest badges (thread spool, shopping
-   bag, book, headphones, true-crime). Pop in on load, then float gently
-   forever; hovering gives an extra little pop + shows a caption.
+   "Favorite things" badges under the About intro (thread spool, shopping
+   bag, book, headphones, true-crime). Held paused until the row scrolls
+   into view (toggled by .doodles-visible, see hero-doodles.ts), then pop
+   in one at a time via each badge's --doodle-delay and float gently
+   forever after; hovering gives an extra little pop + shows a caption.
 ------------------------------------------------------------------------ */
 @keyframes doodle-pop {
   0% { transform: scale(0) rotate(var(--doodle-rot, 0deg)); opacity: 0; }
@@ -190,8 +192,12 @@ body,
 
 .doodle {
   animation:
-    doodle-pop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) both var(--doodle-delay, 0s),
-    doodle-float 6s ease-in-out infinite calc(var(--doodle-delay, 0s) + 0.6s);
+    doodle-pop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) both var(--doodle-delay, 0s) paused,
+    doodle-float 6s ease-in-out infinite calc(var(--doodle-delay, 0s) + 0.6s) paused;
+}
+
+.doodles-visible .doodle {
+  animation-play-state: running, running;
 }
 
 @media (prefers-reduced-motion: reduce) {
