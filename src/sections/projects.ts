@@ -166,24 +166,65 @@ const PROJECTS: Project[] = [
     summary:
       "Selected as 1 of 100 participants from 2,200+ applicants for Morgan Stanley's Code to Give hackathon, where our team built Lemontree, a full-stack volunteer outreach platform for community flyering events that expand access to local food resources.",
     image: { src: "/morgan_stanley.png", alt: "Morgan Stanley Code to Give hackathon project thumbnail" },
-    detailTitle: "Morgan Stanley Hackathon — Full Details",
+    detailTitle: "Morgan Stanley Code to Give Hackathon — Full Details",
     sections: [
       {
         heading: "Overview",
         paragraphs: [
-          "Selected as 1 of 100 participants from 2,200+ applicants to compete in Morgan Stanley's Code to Give hackathon. Collaborated in a cross-functional team of 10 to design and build a full-stack volunteer outreach platform for nonprofit organization Lemontree, aimed at improving coordination and scalability of community flyering events that help expand access to local food resources.",
+          "Selected as 1 of 100 participants from 2,200+ applicants to compete in Morgan Stanley's Code to Give hackathon. Collaborated on a cross-functional team of 10 to design and build a full-stack volunteer outreach platform for nonprofit organization Lemontree. The platform was designed to improve the coordination and scalability of community flyering events that help expand access to local food resources.",
         ],
       },
       {
         heading: "My Role",
         paragraphs: [
-          "Led front-end wireframing, UI design, and development of responsive user interfaces for key platform flows including interactive map features, event discovery, and volunteer signup. Translated product ideas into functional components using modern frontend frameworks while partnering with backend developers to integrate event data and participation tracking features such as the leaderboard.",
+          "Led front-end wireframing, UI design, and development of responsive interfaces for key platform flows, including interactive maps, event discovery, and volunteer signup. Translated product ideas and wireframes into functional components while collaborating with backend developers to integrate event data and participation tracking features, including the volunteer leaderboard.",
+        ],
+      },
+      {
+        heading: "Technologies Used",
+        bullets: [
+          "TypeScript: Used to develop interactive and type-safe frontend functionality.",
+          "Next.js: Used to build the platform's frontend and structure reusable components and pages.",
+          "Tailwind CSS: Used to create responsive layouts and style the platform's user interface.",
+          "Supabase: Used for backend services, database management, and storing application data such as events and volunteer participation.",
+          "Figma: Used for wireframing, UI design, and planning the platform's user experience before development.",
+          "Vercel: Used to deploy and host the application.",
+          "Git/GitHub: Used for version control and collaborative development across the team.",
+        ],
+        paragraphs: [
+          "We chose these technologies to support a modern, scalable full-stack application while allowing our team to collaborate efficiently under the time constraints of the hackathon.",
+        ],
+      },
+      {
+        heading: "Key Features",
+        bullets: [
+          "Interactive map to help volunteers discover community flyering events.",
+          "Event discovery and browsing to make it easier for volunteers to find opportunities.",
+          "Volunteer signup functionality for participating in local outreach events.",
+          "Participation tracking to monitor volunteer involvement.",
+          "Leaderboard to recognize and encourage volunteer participation.",
+          "Responsive user interfaces designed to provide a consistent experience across devices.",
+        ],
+      },
+      {
+        heading: "Challenges & Solutions",
+        bullets: [
+          "Learning New Technologies: This was my first experience contributing to a full-stack application, and several of the technologies were new to me. I adapted by learning through documentation, experimentation, and collaboration with teammates while applying concepts directly to the platform.",
+          "Frontend-Backend Integration: Connecting frontend components with backend data required close coordination with our backend developers. We worked together to ensure that event information and volunteer participation data could be displayed and updated correctly throughout the platform.",
+          "Working Under Time Constraints: Building a functional platform within a short hackathon required us to prioritize essential features and divide responsibilities across our team. Regular communication helped us stay aligned and make progress efficiently.",
+          "Translating Ideas Into a Functional Product: Turning initial ideas and wireframes into a working platform required balancing design, usability, and technical feasibility. I iterated on the interface throughout development based on team feedback and technical constraints.",
+        ],
+      },
+      {
+        heading: "Current Status",
+        paragraphs: [
+          "Our project was completed as a functional full-stack volunteer outreach platform for Lemontree. We successfully developed the core user experience, including event discovery, interactive maps, volunteer signup, and participation tracking. The experience demonstrated how technology can help nonprofits coordinate community outreach more effectively and create scalable ways for volunteers to get involved.",
         ],
       },
       {
         heading: "Reflection",
         paragraphs: [
-          "This was my first experience contributing to a full-stack application while working with several new technologies. The hackathon pushed me outside my comfort zone, strengthened my ability to learn quickly in a collaborative environment, and reinforced my motivation to use technology to create a meaningful impact in local communities!",
+          "This was my first experience contributing to a full-stack application while working with several new technologies. The hackathon pushed me outside my comfort zone and strengthened my ability to learn quickly, collaborate across different roles, and turn ideas into a functional product under time constraints. Most importantly, it reinforced my interest in using technology to solve real-world problems and create meaningful impact in local communities.",
         ],
       },
     ],
