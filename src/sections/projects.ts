@@ -164,7 +164,7 @@ const PROJECTS: Project[] = [
     id: "morgan-stanley-hackathon",
     title: "Morgan Stanley Hackathon",
     summary:
-      "Selected as 1 of 100 participants from 2,200+ applicants for Morgan Stanley's Code to Give hackathon, where our team built Lemontree, a full-stack volunteer outreach platform for community flyering events that expand access to local food resources.",
+      "Our team built Lemontree, a full-stack volunteer outreach platform designed to make community flyering more accessible and organized. Inspired by Lemontree's work to expand access to local food resources, we created a platform that helps volunteers discover events, sign up for opportunities, and track their impact, turning a community-focused idea into a functional technology solution.",
     image: { src: "/morgan_stanley.png", alt: "Morgan Stanley Code to Give hackathon project thumbnail" },
     detailTitle: "Morgan Stanley Code to Give Hackathon — Full Details",
     sections: [
