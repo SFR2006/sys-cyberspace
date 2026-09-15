@@ -18,6 +18,20 @@ function typeLabel(type: CipherPuzzle["type"]): string {
   }
 }
 
+/** How to recognize this cipher family from the ciphertext alone, contrasted
+ * against other encodings a learner might confuse it with. Shown alongside
+ * the puzzle-specific hint, not just how to crack this one instance. */
+function identifyTip(type: CipherPuzzle["type"]): string {
+  switch (type) {
+    case "caesar":
+      return "Spot the type: plain uppercase letters only, same word lengths and spacing as English — the sign of a shift/substitution cipher. Base64 would mix case and digits (often padded with '='); hex would show only 0–9 and a–f.";
+    case "vigenere":
+      return "Spot the type: letters-only, like a Caesar shift, but no single shift decodes the whole thing — that resistance to one fixed shift means a repeating keyword is involved, as in Vigenère. (A rail fence cipher, by contrast, just reorders the same letters, so the letter frequencies would still look exactly like English.)";
+    case "xor":
+      return "Spot the type: space-separated two-character pairs using only 0–9 and a–f — that's hex-encoded bytes. If those bytes don't spell out ASCII text directly, they've likely been XORed with a key first.";
+  }
+}
+
 export function mountCipherTerminal(container: HTMLElement): void {
   // In-memory only, deliberately not persisted — every page load starts the
   // games fresh instead of resuming a previous session's progress.
@@ -30,7 +44,7 @@ export function mountCipherTerminal(container: HTMLElement): void {
 
   const list = el("div", { className: "grid grid-cols-1 gap-3 sm:grid-cols-2" });
   const workspace = el("div", {
-    className: "mt-6 min-h-[220px] border-2 border-paper-ink/30 bg-paper-bg/40 p-6",
+    className: "mt-6 hidden min-h-[220px] border-2 border-paper-ink/30 bg-paper-bg/40 p-6",
   });
 
   function renderList() {
@@ -65,7 +79,9 @@ export function mountCipherTerminal(container: HTMLElement): void {
     input.spellcheck = false; // enumerated attribute — see hero-doodles.ts for why this can't go through attrs
 
     const feedback = el("p", { className: "mt-3 text-sm" });
-    const hintBox = el("p", { className: "mt-3 hidden text-sm italic text-game-warn" });
+    const idTip = el("p", { className: "text-sm italic text-game-warn" });
+    const decodeHint = el("p", { className: "mt-1 text-sm italic text-game-warn" });
+    const hintBox = el("div", { className: "mt-3 hidden", children: [idTip, decodeHint] });
     const explainerBox = el("p", { className: "mt-4 hidden border-t border-paper-ink/20 pt-4 text-sm text-paper-ink-soft" });
 
     const hintBtn = el("button", {
@@ -74,7 +90,8 @@ export function mountCipherTerminal(container: HTMLElement): void {
       attrs: { type: "button" },
     });
     hintBtn.addEventListener("click", () => {
-      hintBox.textContent = `Hint: ${puzzle.hint}`;
+      idTip.textContent = identifyTip(puzzle.type);
+      decodeHint.textContent = `Hint: ${puzzle.hint}`;
       hintBox.classList.remove("hidden");
     });
 
@@ -121,6 +138,7 @@ export function mountCipherTerminal(container: HTMLElement): void {
       explainerBox.classList.remove("hidden");
     }
 
+    workspace.classList.remove("hidden");
     workspace.replaceChildren(
       el("p", { className: "text-xs uppercase tracking-wider text-paper-ink-soft", text: `${typeLabel(puzzle.type)} · difficulty ${puzzle.difficulty}` }),
       el("p", { className: "mt-2 break-all border-2 border-dashed border-paper-ink/40 bg-paper-card/60 p-3 font-mono text-lg text-paper-ink", text: puzzle.ciphertext }),
