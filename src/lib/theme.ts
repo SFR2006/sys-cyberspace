@@ -43,7 +43,7 @@ export function renderDarkModeToggle(): HTMLElement {
     children: [knob],
   });
 
-  const label = el("span", { className: "text-sm text-paper-ink-soft", text: lightMode ? "Light mode" : "Switch to light mode?" });
+  const label = el("span", { className: "text-sm text-paper-ink-soft", text: lightMode ? "Switch back to light mode?" : "Switch to light mode?" });
 
   const button = el("button", {
     className: "inline-flex items-center gap-3",
@@ -54,7 +54,7 @@ export function renderDarkModeToggle(): HTMLElement {
   button.addEventListener("click", () => {
     setLightMode(!lightMode);
     button.setAttribute("aria-checked", String(lightMode));
-    label.textContent = lightMode ? "Light mode" : "Switch to light mode?";
+    label.textContent = lightMode ? "Switch back to light mode?" : "Switch to light mode?";
     track.className = `relative inline-flex h-6 w-12 items-center rounded-full border-2 border-paper-ink transition-colors duration-200 ${lightMode ? "bg-paper-ink" : "bg-paper-card/60"}`;
     knob.className = `absolute top-0.5 h-5 w-5 rounded-full bg-paper-bg shadow transition-all duration-200 ${lightMode ? "left-[1.625rem]" : "left-0.5"}`;
   });
